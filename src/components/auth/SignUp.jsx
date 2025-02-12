@@ -5,7 +5,6 @@ import { apiURL } from "../../../helper"
 export default function SignUp() {
 
     const [formData, setFormData] = useState()
-    console.log(formData)
     const handleInputChange = (name, value) => {
         setFormData({ ...formData, [name]: value })
     }

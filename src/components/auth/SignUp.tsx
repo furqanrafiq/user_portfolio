@@ -1,21 +1,62 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import axios from "axios"
 import { apiURL } from "../../../helper"
+import { notification } from 'antd';
+import { CheckCircleTwoTone, CloseCircleTwoTone, LoadingOutlined } from '@ant-design/icons';
+
+import type { NotificationArgsProps } from 'antd';
+
+type NotificationPlacement = NotificationArgsProps['placement'];
+
+interface FormData {
+    [key: string]: string;
+}
 
 export default function SignUp() {
 
-    const [formData, setFormData] = useState()
-    const handleInputChange = (name, value) => {
-        setFormData({ ...formData, [name]: value })
-    }
+    const [api, contextHolder] = notification.useNotification();
+    const [formData, setFormData] = useState<FormData>({});
+    const [loading, setLoading] = useState(Boolean)
 
-    const handleSubmit = (e) => {
+    const handleInputChange = (name: string, value: string) => {
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
+    };
+
+    const openNotification = (placement: NotificationPlacement, status: boolean, message: string) => {
+        if (status) {
+            api.info({
+                message,
+                // description: <Context.Consumer>{({ name }) => `Hello, ${name}!`}</Context.Consumer>,
+                placement,
+                icon: <CheckCircleTwoTone twoToneColor={"#52c41a"} />
+            });
+        } else {
+            api.info({
+                message,
+                // description: <Context.Consumer>{({ name }) => `Hello, ${name}!`}</Context.Consumer>,
+                placement,
+                icon: <CloseCircleTwoTone twoToneColor={"#eb2f96"} />
+            });
+        }
+    };
+
+    const handleSubmit = (e: any) => {
         e.preventDefault()
-        return axios.post(`${apiURL}/api/auth/register`, formData).then(() => console.log('submitted'))
+        setLoading(true)
+        return axios.post(`${apiURL}/api/auth/register`, formData)
+            .then((res) => {
+                openNotification('topRight', true, res.data.msg)
+                setLoading(false)
+            })
+            .catch((res) => {
+                openNotification('topRight', false, res.response.data.msg)
+                setLoading(false)
+            })
     }
 
     return (
         <>
+            {contextHolder}
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
@@ -91,12 +132,22 @@ export default function SignUp() {
                         <div>
                             <button
                                 type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 items-center"
+                                disabled={loading}
                             >
+                                {loading && <LoadingOutlined color="white" className="mr-2"/>}
                                 Sign in
                             </button>
                         </div>
                     </form>
+                    {/* 
+                    <button
+                        // type="submit"
+                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        onClick={() => openNotification('topRight', false)}
+                    >
+                        open
+                    </button> */}
                 </div>
             </div>
         </>

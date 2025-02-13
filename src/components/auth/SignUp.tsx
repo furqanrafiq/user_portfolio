@@ -26,14 +26,12 @@ export default function SignUp() {
         if (status) {
             api.info({
                 message,
-                // description: <Context.Consumer>{({ name }) => `Hello, ${name}!`}</Context.Consumer>,
                 placement,
                 icon: <CheckCircleTwoTone twoToneColor={"#52c41a"} />
             });
         } else {
             api.info({
                 message,
-                // description: <Context.Consumer>{({ name }) => `Hello, ${name}!`}</Context.Consumer>,
                 placement,
                 icon: <CloseCircleTwoTone twoToneColor={"#eb2f96"} />
             });

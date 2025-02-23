@@ -5,7 +5,20 @@ import { notification } from 'antd';
 import { CheckCircleTwoTone, CloseCircleTwoTone, LoadingOutlined } from '@ant-design/icons';
 
 import type { NotificationArgsProps } from 'antd';
-import { NavLink } from "react-router-dom";
+import { Layout, Form, Input, Button, Typography, Divider } from 'antd';
+import {
+    HeartFilled,
+    GoogleOutlined,
+    FacebookFilled,
+    AppleFilled,
+    MailOutlined,
+    LockOutlined
+} from '@ant-design/icons';
+import { useNavigate } from "react-router-dom";
+
+const { Content } = Layout;
+const { Text } = Typography;
+
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 
@@ -16,12 +29,13 @@ interface FormData {
 export default function Login() {
 
     const [api, contextHolder] = notification.useNotification();
-    const [formData, setFormData] = useState<FormData>({});
+    // const [formData, setFormData] = useState<FormData>({});
     const [loading, setLoading] = useState(Boolean)
+    const navigate = useNavigate()
 
-    const handleInputChange = (name: string, value: string) => {
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
-    };
+    // const handleInputChange = (name: string, value: string) => {
+    //     setFormData((prevData) => ({ ...prevData, [name]: value }));
+    // };
 
     const openNotification = (placement: NotificationPlacement, status: boolean, message: string) => {
         if (status) {
@@ -39,13 +53,14 @@ export default function Login() {
         }
     };
 
-    const handleSubmit = (e: any) => {
-        e.preventDefault()
+    const onFinish = (values: any) => {
+        const formData = { ...values }
         setLoading(true)
         return axios.post(`${apiURL}/api/auth/login`, formData)
             .then((res) => {
                 openNotification('topRight', true, res.data.msg)
                 setLoading(false)
+                navigate('/dashboard')
             })
             .catch((res) => {
                 openNotification('topRight', false, res.response.data.msg)
@@ -56,7 +71,7 @@ export default function Login() {
     return (
         <>
             {contextHolder}
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            {/* <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         alt="Your Company"
@@ -131,6 +146,75 @@ export default function Login() {
                             Don't have an account? Signup
                         </p>
                     </NavLink>
+                </div>
+            </div> */}
+            <div className="w-full max-w-md mx-auto my-20">
+                {/* Logo */}
+                <div className="text-center mb-8">
+                    <p className="font-serif mb-2 text-heading">Welcome Back</p>
+                    <p className="text-gray-500 font-sans text-[16px]">
+                        Sign in to access your wedding planning tools
+                    </p>
+                </div>
+
+                {/* Email Sign In Form */}
+                <Form
+                    name="signin"
+                    onFinish={onFinish}
+                    layout="vertical"
+                    className="mb-6"
+                >
+                    <Form.Item
+                        name="email"
+                        rules={[
+                            { required: true, message: 'Please enter your email' },
+                            { type: 'email', message: 'Please enter a valid email' }
+                        ]}
+                    >
+                        <Input
+                            prefix={<MailOutlined className="text-gray-400" />}
+                            placeholder="Email"
+                            size="large"
+                            className="rounded-md"
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: 'Please enter your password' }]}
+                    >
+                        <Input.Password
+                            prefix={<LockOutlined className="text-gray-400" />}
+                            placeholder="Password"
+                            size="large"
+                            className="rounded-md"
+                        />
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            size="large"
+                            block
+                            loading={loading}
+                            disabled={loading}
+                            className="border-none h-12 text-base font-medium"
+                        >
+                            Sign In
+                        </Button>
+                    </Form.Item>
+                </Form>
+                <div className="text-center space-y-4">
+                    <Text className="text-gray-500">
+                        <a href="#" className="font-sans">Forgot your password?</a>
+                    </Text>
+                    <div>
+                        <Text className="text-gray-500">
+                            Don't have an account?{' '}
+                            <a href="#" className="font-sans">Sign up</a>
+                        </Text>
+                    </div>
                 </div>
             </div>
         </>

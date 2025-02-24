@@ -24,12 +24,7 @@ interface FormData {
 export default function SignUp() {
 
     const [api, contextHolder] = notification.useNotification();
-    const [formData, setFormData] = useState<FormData>({});
     const [loading, setLoading] = useState(Boolean)
-
-    const handleInputChange = (name: string, value: string) => {
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
-    };
 
     const openNotification = (placement: NotificationPlacement, status: boolean, message: string) => {
         if (status) {
@@ -47,10 +42,10 @@ export default function SignUp() {
         }
     };
 
-    const onFinish = (e: any) => {
-        e.preventDefault()
+    const onFinish = (values: any) => {
+        const body = { ...values }
         setLoading(true)
-        return axios.post(`${apiURL}/api/auth/register`, formData)
+        return axios.post(`${apiURL}/api/auth/register`, body)
             .then((res) => {
                 openNotification('topRight', true, res.data.msg)
                 setLoading(false)

@@ -1,5 +1,92 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .font-serif {
+    font-family: 'Cormorant Garamond', serif;
+  }
+}
+
+body {
+  background-color: #F4EDE9;
+}
+
+/* Ant Design Customizations */
+.ant-btn-primary {
+  background-color: #000 !important;
+}
+
+.ant-btn-primary:hover {
+  background-color: #000000ca !important;
+}
+
+.ant-btn-primary:disabled {
+  color: white;
+  background-color: #000000ca !important;
+
+}
+
+.ant-menu-horizontal {
+  line-height: 64px;
+}
+
+.ant-menu-item:hover {
+  color: #ec4899 !important;
+}
+
+.ant-card-hoverable:hover {
+  transform: translateY(-4px);
+  transition: transform 0.3s ease;
+}
+
+.ant-typography {
+  margin-bottom: 0;
+}
+
+/* Override Ant Design's default header padding */
+.ant-layout-header {
+  height: 64px;
+  padding: 0;
+  line-height: 64px;
+  background: #fff;
+}
+
+.ant-row {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+.general-card {
+  border-radius: 20px;
+  background: #FBF9F7;
+}
+
+.general-card .general-image {
+  border-radius: 20px;
+}
+
+.general-card .general-heading {
+  color: #1F1509;
+}
+
+.general-card:hover {
+  cursor: pointer;
+  background: #fbf9f77c;
+  animation: scaleUp 1s ease forwards;
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.02);
+  }
+}

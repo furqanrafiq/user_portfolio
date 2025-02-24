@@ -2,10 +2,18 @@ import React, { useState } from "react"
 import axios from "axios"
 import { apiURL } from "../../../helper"
 import { notification } from 'antd';
-import { CheckCircleTwoTone, CloseCircleTwoTone, LoadingOutlined } from '@ant-design/icons';
+import { CheckCircleTwoTone, CloseCircleTwoTone, LoadingOutlined, UserOutlined } from '@ant-design/icons';
 
 import type { NotificationArgsProps } from 'antd';
-import { NavLink } from "react-router-dom";
+import { Layout, Form, Input, Button, Typography, Divider } from 'antd';
+import {
+    HeartFilled,
+    GoogleOutlined,
+    FacebookFilled,
+    AppleFilled,
+    MailOutlined,
+    LockOutlined
+} from '@ant-design/icons';
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 
@@ -16,12 +24,7 @@ interface FormData {
 export default function SignUp() {
 
     const [api, contextHolder] = notification.useNotification();
-    const [formData, setFormData] = useState<FormData>({});
     const [loading, setLoading] = useState(Boolean)
-
-    const handleInputChange = (name: string, value: string) => {
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
-    };
 
     const openNotification = (placement: NotificationPlacement, status: boolean, message: string) => {
         if (status) {
@@ -39,10 +42,10 @@ export default function SignUp() {
         }
     };
 
-    const handleSubmit = (e: any) => {
-        e.preventDefault()
+    const onFinish = (values: any) => {
+        const body = { ...values }
         setLoading(true)
-        return axios.post(`${apiURL}/api/auth/register`, formData)
+        return axios.post(`${apiURL}/api/auth/register`, body)
             .then((res) => {
                 openNotification('topRight', true, res.data.msg)
                 setLoading(false)
@@ -56,7 +59,7 @@ export default function SignUp() {
     return (
         <>
             {contextHolder}
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            {/* <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         alt="Your Company"
@@ -109,11 +112,6 @@ export default function SignUp() {
                                 <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
                                     Password
                                 </label>
-                                {/* <div className="text-sm">
-                                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                                        Forgot password?
-                                    </a>
-                                </div> */}
                             </div>
                             <div className="mt-2">
                                 <input
@@ -143,11 +141,93 @@ export default function SignUp() {
                     <NavLink to={'login'}>
                         <p
                             className="text-indigo-600 hover:text-indigo-500 mt-2 text-sm"
-                        // onClick={() => openNotification('topRight', false)}
                         >
                             Already have an account? Login
                         </p>
                     </NavLink>
+                </div>
+            </div> */}
+            <div className="w-full max-w-md mx-auto my-20">
+                {/* Logo */}
+                <div className="text-center mb-8">
+                    <p className="font-serif mb-2 text-heading">Join Loverly</p>
+                    <p className="text-gray-500 font-sans text-[16px]">
+                        Create a free account to unlock your personalized event planning dashboard.
+                    </p>
+                </div>
+
+                {/* Email Sign In Form */}
+                <Form
+                    name="signin"
+                    onFinish={onFinish}
+                    layout="vertical"
+                    className="mb-6"
+                >
+                    <Form.Item
+                        name="name"
+                        rules={[
+                            { required: true, message: 'Please enter your name' }
+                        ]}
+                    >
+                        <Input
+                            prefix={<UserOutlined className="text-gray-400" />}
+                            placeholder="Name"
+                            size="large"
+                            className="rounded-md"
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="email"
+                        rules={[
+                            { required: true, message: 'Please enter your email' },
+                            { type: 'email', message: 'Please enter a valid email' }
+                        ]}
+                    >
+                        <Input
+                            prefix={<MailOutlined className="text-gray-400" />}
+                            placeholder="Email"
+                            size="large"
+                            className="rounded-md"
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: 'Please enter your password' }]}
+                    >
+                        <Input.Password
+                            prefix={<LockOutlined className="text-gray-400" />}
+                            placeholder="Password"
+                            size="large"
+                            className="rounded-md"
+                        />
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            size="large"
+                            block
+                            loading={loading}
+                            disabled={loading}
+                            className="border-none h-12 text-base font-medium"
+                        >
+                            Sign In
+                        </Button>
+                    </Form.Item>
+                </Form>
+                <div className="text-center space-y-4">
+                    {/* <Text className="text-gray-500">
+                        <a href="#" className="font-sans">Forgot your password?</a>
+                    </Text> */}
+                    <div>
+                        <p className="text-gray-500">
+                            Don't have an account?{' '}
+                            <a href="#" className="font-sans text-blue-500">Sign up</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </>

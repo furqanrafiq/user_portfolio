@@ -7,8 +7,16 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        serif: ["Playfair Display", "serif"],
+        sans: ["Inter", "sans-serif"],
       },
+      fontSize: {
+        heading: "30px", // Define a generic heading size (adjust as needed)
+      },
+      backgroundColor:{
+        primary: "#F4EDE9",
+        secondary:'#FBF9F7'
+      }
     },
   },
   plugins: [],

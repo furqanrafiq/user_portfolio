@@ -3,19 +3,13 @@ import axios from "axios"
 import { apiURL } from "../../../helper"
 import { notification } from 'antd';
 import { CheckCircleTwoTone, CloseCircleTwoTone, LoadingOutlined, UserOutlined } from '@ant-design/icons';
-
-import type { NotificationArgsProps } from 'antd';
 import { Layout, Form, Input, Button, Typography, Divider } from 'antd';
 import {
-    HeartFilled,
-    GoogleOutlined,
-    FacebookFilled,
-    AppleFilled,
     MailOutlined,
     LockOutlined
 } from '@ant-design/icons';
-
-type NotificationPlacement = NotificationArgsProps['placement'];
+import { openNotification } from "../../utils/notifications";
+import { useNotify } from "../../utils/NotificationProvider";
 
 interface FormData {
     [key: string]: string;
@@ -23,42 +17,35 @@ interface FormData {
 
 export default function SignUp() {
 
-    const [api, contextHolder] = notification.useNotification();
+    // const [api, contextHolder] = notification.useNotification();
     const [loading, setLoading] = useState(Boolean)
-
-    const openNotification = (placement: NotificationPlacement, status: boolean, message: string) => {
-        if (status) {
-            api.info({
-                message,
-                placement,
-                icon: <CheckCircleTwoTone twoToneColor={"#52c41a"} />
-            });
-        } else {
-            api.info({
-                message,
-                placement,
-                icon: <CloseCircleTwoTone twoToneColor={"#eb2f96"} />
-            });
-        }
-    };
+    const notify = useNotify();
 
     const onFinish = (values: any) => {
         const body = { ...values }
         setLoading(true)
         return axios.post(`${apiURL}/api/auth/register`, body)
             .then((res) => {
-                openNotification('topRight', true, res.data.msg)
-                setLoading(false)
+                console.log(res)
+                notify.success({
+                    message: 'Success!',
+                    description: res.data.msg,
+                    placement: 'topRight',
+                }); setLoading(false)
             })
             .catch((res) => {
-                openNotification('topRight', false, res.response.data.msg)
+                notify.success({
+                    message: 'Success!',
+                    description: res.data.msg,
+                    placement: 'topRight',
+                });
                 setLoading(false)
             })
     }
 
     return (
         <>
-            {contextHolder}
+            {/* {contextHolder} */}
             {/* <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img

@@ -163,7 +163,7 @@ export default function Navbar() {
                         <MenuOutlined className="lg:hidden mr-4 text-lg" />
                         <div className="flex items-center">
                             <HeartFilled className="text-2xl text-pink-500" />
-                            <span className="ml-2 text-2xl font-serif">Loverly</span>
+                            <span className="ml-2 text-2xl font-serif">Easyshadi</span>
                         </div>
                     </div>
 

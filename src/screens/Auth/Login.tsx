@@ -1,76 +1,60 @@
 import React, { useState } from "react"
 import axios from "axios"
 import { apiURL } from "../../../helper"
-import { notification } from 'antd';
-import { CheckCircleTwoTone, CloseCircleTwoTone, LoadingOutlined } from '@ant-design/icons';
 
 import type { NotificationArgsProps } from 'antd';
 import { Layout, Form, Input, Button, Typography, Divider } from 'antd';
 import {
-    HeartFilled,
-    GoogleOutlined,
-    FacebookFilled,
-    AppleFilled,
     MailOutlined,
     LockOutlined
 } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
+import { openNotification } from "../../utils/notifications";
+import { useNotify } from "../../utils/NotificationProvider";
+import { storeUserReducer } from "./redux/authSlice";
+import { useDispatch } from "react-redux";
 
-const { Content } = Layout;
 const { Text } = Typography;
-
-
-type NotificationPlacement = NotificationArgsProps['placement'];
 
 interface FormData {
     [key: string]: string;
 }
 
 export default function Login() {
-
-    const [api, contextHolder] = notification.useNotification();
-    // const [formData, setFormData] = useState<FormData>({});
     const [loading, setLoading] = useState(Boolean)
     const navigate = useNavigate()
-
-    // const handleInputChange = (name: string, value: string) => {
-    //     setFormData((prevData) => ({ ...prevData, [name]: value }));
-    // };
-
-    const openNotification = (placement: NotificationPlacement, status: boolean, message: string) => {
-        if (status) {
-            api.info({
-                message,
-                placement,
-                icon: <CheckCircleTwoTone twoToneColor={"#52c41a"} />
-            });
-        } else {
-            api.info({
-                message,
-                placement,
-                icon: <CloseCircleTwoTone twoToneColor={"#eb2f96"} />
-            });
-        }
-    };
+    const notify = useNotify();
+    const dispatch = useDispatch()
 
     const onFinish = (values: any) => {
         const formData = { ...values }
         setLoading(true)
         return axios.post(`${apiURL}/api/auth/login`, formData)
             .then((res) => {
-                openNotification('topRight', true, res.data.msg)
+                // openNotification('topRight', 'success', res.data.msg)
+                notify.success({
+                    message: 'Success!',
+                    description: res.data.msg,
+                    placement: 'topRight',
+                });
                 setLoading(false)
                 navigate('/dashboard')
+                dispatch(storeUserReducer(res.data.user))
+                
             })
             .catch((res) => {
-                openNotification('topRight', false, res.response.data.msg)
+                openNotification('topRight', 'error', res.response.data.msg)
+                notify.error({
+                    message: 'Error!',
+                    description: res.response.data.msg,
+                    placement: 'topRight',
+                });
                 setLoading(false)
             })
     }
 
     return (
         <>
-            {contextHolder}
             {/* <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img

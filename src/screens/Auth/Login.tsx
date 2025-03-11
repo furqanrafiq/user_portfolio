@@ -38,6 +38,7 @@ export default function Login() {
                     placement: 'topRight',
                 });
                 setLoading(false)
+                localStorage.setItem('easyShadiUserId',res.data.user.id)
                 navigate('/dashboard')
                 dispatch(storeUserReducer(res.data.user))
                 

@@ -1,12 +1,32 @@
 import { Layout, Menu, Dropdown, Button } from 'antd';
 import { HeartFilled, MenuOutlined, DownOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { apiURL } from '../../../../helper';
 
 const { Header, } = Layout;
 
 export default function Navbar() {
     const navigate = useNavigate()
-    // const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [services, setAllServices] = useState([])
+
+    function getAllServices() {
+        return axios.get(`${apiURL}/api/services/get-all`).then((res) => {
+            console.log(res)
+            let servicesArray = res.data.map((item) => ({
+                name: item.name,
+                link: `/services/${item.name}`,
+            })
+            )
+            setAllServices(servicesArray)
+        })
+    }
+
+    useEffect(() => {
+        getAllServices()
+    }, [])
+
 
     const menuItems = [
         {
@@ -37,36 +57,37 @@ export default function Navbar() {
             title: "Find Wedding Professionals",
             link: "#",
             icon: "👥",
-            subMenu: [
-                {
-                    name: "Wedding Venue",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Photography",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Florist",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Wedding Planner",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Videography",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Caterer",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Entertainment",
-                    link: "/wedding-venue",
-                }
-            ]
+            // subMenu: [
+            //     {
+            //         name: "Wedding Venue",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Photography",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Florist",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Wedding Planner",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Videography",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Caterer",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Entertainment",
+            //         link: "/services",
+            //     }
+            // ]
+            subMenu: services
         },
         {
             title: "Popular Wedding Destinations",
@@ -75,27 +96,27 @@ export default function Navbar() {
             subMenu: [
                 {
                     name: "Athens, Greece",
-                    link: "/wedding-venue",
+                    link: "/services",
                 },
                 {
                     name: "Cabo San Lucas, Mexico",
-                    link: "/wedding-venue",
+                    link: "/services",
                 },
                 {
                     name: "Los Angeles, California",
-                    link: "/wedding-venue",
+                    link: "/services",
                 },
                 {
                     name: "New York, New York",
-                    link: "/wedding-venue",
+                    link: "/services",
                 },
                 {
                     name: "Chicago, Illinois",
-                    link: "/wedding-venue",
+                    link: "/services",
                 },
                 {
                     name: "Melbourne, Australia",
-                    link: "/wedding-venue",
+                    link: "/services",
                 }
             ]
         }
@@ -155,6 +176,27 @@ export default function Navbar() {
         </Menu>
     );
 
+    function handleLogout() {
+        navigate('/')
+        localStorage.removeItem('easyShadiUserId');
+    }
+
+    const logoutMenu = (
+        <Menu className="bg-white shadow-lg rounded-lg grid grid-cols-1">
+            <div className='p-3 hover:bg-gray-100 font-sans hover:cursor-pointer' onClick={() => handleLogout()}>
+                <p>Logout</p>
+            </div>
+        </Menu>
+    );
+
+    const [userId, setUserId] = useState()
+
+    useEffect(() => {
+        if (localStorage.getItem('easyShadiUserId')) {
+            setUserId(localStorage.getItem('easyShadiUserId'))
+        }
+    }, [localStorage])
+
     return (
         <Header className="bg-secondary px-0">
             <div className="mx-auto container px-4 sm:px-6 lg:px-8">
@@ -183,15 +225,30 @@ export default function Navbar() {
 
                     <div className="flex items-center space-x-4">
                         {/* <UserOutlined className="text-lg" /> */}
-                        <Dropdown overlay={userMenu} trigger={["hover"]} placement="bottomCenter">
-                            <Button
-                                type="primary"
-                                className="border-none text-base font-medium p-5"
-                                size="small"
-                            >
-                                Get Started
-                            </Button>
-                        </Dropdown>
+                        {
+                            userId ?
+                                <NavLink to={'/dashboard'}>
+                                    <Dropdown overlay={logoutMenu} trigger={["hover"]} placement="bottomCenter">
+                                        <Button
+                                            type="primary"
+                                            className="border-none text-base font-medium p-5"
+                                            size="small"
+                                        >
+                                            Dashboard
+                                        </Button>
+                                    </Dropdown>
+                                </NavLink>
+                                :
+                                <Dropdown overlay={userMenu} trigger={["hover"]} placement="bottomCenter">
+                                    <Button
+                                        type="primary"
+                                        className="border-none text-base font-medium p-5"
+                                        size="small"
+                                    >
+                                        Get Started
+                                    </Button>
+                                </Dropdown>
+                        }
                     </div>
                 </div>
             </div>

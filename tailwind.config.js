@@ -16,6 +16,10 @@ export default {
       backgroundColor:{
         primary: "#F4EDE9",
         secondary:'#FBF9F7'
+      },
+      borderColor:{
+        primary: "#F4EDE9",
+        secondary:'#FBF9F7'
       }
     },
   },

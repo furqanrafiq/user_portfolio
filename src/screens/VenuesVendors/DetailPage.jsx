@@ -20,12 +20,10 @@ const DetailPage = () => {
         getServiceDetails()
     }, [params])
 
-    console.log(service)
-
     return (
         <div className='container mx-auto my-10'>
             <div className='text-center'>
-                <p style={{ border: "1px solid darkgrey", width: "fit-content", borderRadius: "20px", padding: "10px", margin: "0px auto" }} className='font-sans'>Wedding Venue</p>
+                <p style={{ border: "1px solid darkgrey", width: "fit-content", borderRadius: "20px", padding: "10px", margin: "0px auto" }} className='font-sans'>{service?.serviceName}</p>
                 <p className='font-serif text-heading'>Lisbon, Portugal</p>
                 <p className='font-sans text-[16px]'>Lisbon, Portugal</p>
             </div>

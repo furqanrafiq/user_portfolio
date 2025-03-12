@@ -147,7 +147,7 @@ export default function SignUp() {
                     </div>
 
                     <div className="mt-5">
-                        <AllServices isDisabled={isVendor} handleService={handleService} />
+                        <AllServices isDisabled={!isVendor} handleService={handleService} />
                     </div>
 
                     <Form.Item>

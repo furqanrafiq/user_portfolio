@@ -30,7 +30,7 @@ function AddServiceModal({ isModalOpen, setIsModalOpen }) {
                 });
             })
             .catch((error) => {
-                notify.error({ 
+                notify.error({
                     message: 'Error',
                     description: error.response?.data?.msg || 'Something went wrong',
                     placement: 'topRight',
@@ -51,6 +51,7 @@ function AddServiceModal({ isModalOpen, setIsModalOpen }) {
                     className="mb-6"
                 >
                     <div className="mb-5">
+                        <p className='mb-2'>Service</p>
                         <AllServices
                             isDisabled={false}
                             handleService={handleService}
@@ -58,14 +59,29 @@ function AddServiceModal({ isModalOpen, setIsModalOpen }) {
                     </div>
 
                     <Form.Item
+                        name="Name"
+                        rules={[
+                            { required: true, message: 'Please enter service name' }
+                        ]}
+                        label="Name"
+                    >
+                        <Input
+                            placeholder="Name"
+                            size="medium"
+                            className="rounded-md"
+                        />
+                    </Form.Item>
+
+                    <Form.Item
                         name="description"
+                        label="Description"
                         rules={[
                             { required: true, message: 'Please enter description' }
                         ]}
                     >
                         <Input.TextArea
                             placeholder="Description"
-                            size="large"
+                            size="medium"
                             className="rounded-md"
                         />
                     </Form.Item>
@@ -75,26 +91,37 @@ function AddServiceModal({ isModalOpen, setIsModalOpen }) {
                         rules={[
                             { required: true, message: 'Please enter price' }
                         ]}
+                        label="Price"
                     >
                         <Input
+                            type='number'
                             placeholder="Price"
-                            size="large"
+                            size="medium"
                             className="rounded-md"
                         />
                     </Form.Item>
 
                     <Form.Item>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            // size="large"
-                            block
-                            loading={loading}
-                            disabled={loading}
-                            className="mt-5 border-none h-12 text-base font-medium"
-                        >
-                            Add Service
-                        </Button>
+                        <div className='text-end'>
+                            <Button
+                                type="secondary"
+                                loading={loading}
+                                disabled={loading}
+                                className="mt-5 border-none h-6 font-medium"
+                                onClick={() => setIsModalOpen(false)}
+                            >
+                                Close
+                            </Button>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                loading={loading}
+                                disabled={loading}
+                                className="mt-5 border-none h-12 font-medium"
+                            >
+                                Add Service
+                            </Button>
+                        </div>
                     </Form.Item>
                 </Form>
             </Modal>

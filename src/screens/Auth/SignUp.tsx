@@ -56,7 +56,7 @@ export default function SignUp() {
         <>
             <div className="w-full max-w-md mx-auto my-20">
                 {/* <div className="text-center mb-8">
-                    <p className="font-serif mb-2 text-heading">Join Loverly</p>
+                    <p className="font-serif mb-2 text-heading">Join Easyshadi</p>
                     <p className="text-gray-500 font-sans text-[16px]">
                         Select which profile you want to sign in for
                     </p>
@@ -72,7 +72,7 @@ export default function SignUp() {
                     </div>
                 </div> */}
                 <div className="text-center mb-8">
-                    <p className="font-serif mb-2 text-heading">Join Loverly</p>
+                    <p className="font-serif mb-2 text-heading">Join Easyshadi</p>
                     <p className="text-gray-500 font-sans text-[16px]">
                         Create a free account to unlock your personalized event planning dashboard.
                     </p>

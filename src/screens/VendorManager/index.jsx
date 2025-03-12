@@ -95,7 +95,7 @@ const VendorManager = () => {
                     <p className="font-serif text-heading text-center mt-10">Build Your Free Wedding Vendor Manager</p>
                     <p className="font-sans">Get started with our easy-to-use wedding vendor management system and stay in control of every aspect of your wedding planning journey.</p>
                     <div className="mt-5">
-                        <p className="font-bold">1. Sign up for a free Loverly account</p>
+                        <p className="font-bold">1. Sign up for a free Easyshadi account</p>
                         <p className="font-sans">Create an account to access our wedding vendor manager and start organizing your planning process.</p>
                     </div>
                     <div className="mt-5">

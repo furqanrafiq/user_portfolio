@@ -5,14 +5,52 @@ import axios from 'axios';
 import { apiURL } from '../../../../helper';
 import { useSelector } from 'react-redux';
 import AddServiceModal from './AddServiceModal';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { useNotify } from '../../../utils/NotificationProvider';
 
 const Services = () => {
+
+    const user = useSelector((state) => state?.user?.user)
+    const [userServices, setUserServices] = useState()
+    const [isModalOpen, setIsModalOpen] = useState(Boolean)
+    const [editService, setEditService] = useState({})
+    const notify = useNotify()
+
+    function getUserServices(userId) {
+        return axios.get(`${apiURL}/api/services/user-service?userId=${user?.id}`).then((res) => {
+            setUserServices(res.data)
+        })
+    }
+
+    useEffect(() => {
+        getUserServices(user?.id)
+    }, [user])
+
+    function deleteUserService(uuid) {
+        return axios.get(`${apiURL}/api/services/delete-user-service?uuid=${uuid}`)
+            .then((res) => {
+                notify.success({
+                    message: 'Success!',
+                    description: res.data.msg,
+                    placement: 'topRight',
+                });
+                getUserServices(user?.id)
+            }).catch((err) => {
+                notify.error({
+                    message: 'Error!',
+                    description: err.data.msg,
+                    placement: 'topRight',
+                });
+            })
+    }
+
     interface DataType {
         key: string;
         name: string;
-        age: number;
-        address: string;
-        tags: string[];
+        serviceId: string;
+        description: string;
+        price: number;
+        uuid: string;
     }
 
     const columns: TableProps<DataType>['columns'] = [
@@ -37,26 +75,13 @@ const Services = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Tag color='blue' style={{ cursor: 'pointer' }}>Edit</Tag>
-                    <Tag color='red' style={{ cursor: 'pointer' }}>Delete</Tag>
+                    <EditOutlined style={{ cursor: 'pointer' }} onClick={(() => { setEditService(record); setIsModalOpen(true) })} />
+                    <DeleteOutlined style={{ cursor: 'pointer' }} onClick={() => deleteUserService(record.uuid)} />
                 </Space>
             ),
         },
     ];
 
-    const userid = localStorage.getItem('easyShadiUserId')
-    const [userServices, setUserServices] = useState()
-    const [isModalOpen, setIsModalOpen] = useState(Boolean)
-
-    function getUserServices(userId) {
-        return axios.get(`${apiURL}/api/services/user-service?userId=${userId}`).then((res) => {
-            setUserServices(res.data)
-        })
-    }
-
-    useEffect(() => {
-        getUserServices(userid)
-    }, [])
 
     return (
         <div>
@@ -72,7 +97,7 @@ const Services = () => {
                 </Button>
             </div>
             <Table<DataType> columns={columns} dataSource={userServices} />
-            <AddServiceModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+            <AddServiceModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} getUserServices={getUserServices} editService={editService} />
         </div>
     )
 }

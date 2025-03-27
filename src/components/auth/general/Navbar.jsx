@@ -4,16 +4,19 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { apiURL } from '../../../../helper';
+import { useDispatch, useSelector } from 'react-redux';
+import { storeUserReducer } from '../../../screens/Auth/redux/authSlice';
 
 const { Header, } = Layout;
 
 export default function Navbar() {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const [services, setAllServices] = useState([])
+
 
     function getAllServices() {
         return axios.get(`${apiURL}/api/services/get-all`).then((res) => {
-            console.log(res)
             let servicesArray = res.data.map((item) => ({
                 name: item.name,
                 link: `/services/${item.name}`,
@@ -176,9 +179,12 @@ export default function Navbar() {
         </Menu>
     );
 
+
+
     function handleLogout() {
-        navigate('/')
-        localStorage.removeItem('easyShadiUserId');
+        localStorage.removeItem('easyShadiUser');
+        dispatch(storeUserReducer({}))
+        window.location.href = "/login";
     }
 
     const logoutMenu = (
@@ -189,13 +195,7 @@ export default function Navbar() {
         </Menu>
     );
 
-    const [userId, setUserId] = useState()
-
-    useEffect(() => {
-        if (localStorage.getItem('easyShadiUserId')) {
-            setUserId(localStorage.getItem('easyShadiUserId'))
-        }
-    }, [localStorage])
+    const user = useSelector((state) => state?.user?.user)
 
     return (
         <Header className="bg-secondary px-0">
@@ -226,8 +226,8 @@ export default function Navbar() {
                     <div className="flex items-center space-x-4">
                         {/* <UserOutlined className="text-lg" /> */}
                         {
-                            userId ?
-                                <NavLink to={'/dashboard'}>
+                            user?.id ?
+                                <NavLink to={'/dashboard/home'}>
                                     <Dropdown overlay={logoutMenu} trigger={["hover"]} placement="bottomCenter">
                                         <Button
                                             type="primary"

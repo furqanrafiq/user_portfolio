@@ -86,7 +86,23 @@ body {
   0% {
     transform: scale(1);
   }
+
   100% {
     transform: scale(1.02);
   }
+}
+
+.event-type-radio .ant-radio-button-wrapper-checked {
+  background: black;
+  color: white;
+  border-color: black !important;
+  background-color: black !important;
+}
+
+.event-type-radio .ant-radio-button-wrapper-checked:hover{
+  color: white;
+}
+
+:where(.css-dev-only-do-not-override-1yacf91).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before,:where(.css-dev-only-do-not-override-1yacf91).ant-radio-button-wrapper:not(.ant-radio-button-wrapper-disabled)::before {
+  content: none;
 }

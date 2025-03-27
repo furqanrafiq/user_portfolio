@@ -28,7 +28,7 @@ const DetailPage = () => {
                 <p className='font-sans text-[16px]'>Lisbon, Portugal</p>
             </div>
             <div className='mt-5 w-[50%] mx-auto'>
-                <ImageGallery />
+                <ImageGallery images={service?.images} />
             </div>
             <div className='mt-5 w-[75%] mx-auto'>
                 <Row className='justify-between' gutter={24}>

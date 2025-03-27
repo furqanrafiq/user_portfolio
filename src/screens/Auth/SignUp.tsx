@@ -23,16 +23,16 @@ export default function SignUp() {
     const [loading, setLoading] = useState(Boolean)
     const notify = useNotify();
     const [isVendor, setIsVendor] = useState(Boolean)
-    const [service, setService] = useState(Object)
+    // const [service, setService] = useState(Object)
 
-    function handleService(data){
-        setService(data)
-    }
+    // function handleService(data) {
+    //     setService(data)
+    // }
 
     const onFinish = (values: any) => {
         const body = { ...values }
         body.isVendor = isVendor;
-        body.service = service
+        // body.service = service
         setLoading(true)
         return axios.post(`${apiURL}/api/auth/register`, body)
             .then((res) => {
@@ -146,9 +146,9 @@ export default function SignUp() {
                         />
                     </div>
 
-                    <div className="mt-5">
+                    {/* <div className="mt-5">
                         <AllServices isDisabled={!isVendor} handleService={handleService} />
-                    </div>
+                    </div> */}
 
                     <Form.Item>
                         <Button

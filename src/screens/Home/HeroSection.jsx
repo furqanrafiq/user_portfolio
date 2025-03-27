@@ -5,8 +5,8 @@ const { Search } = Input;
 
 const HeroSection = () => {
   return (
-    <div className="relative">
-      <div className="absolute inset-0" style={{ background: heroSectionImg }}>
+    <div className="relative" style={{ background: heroSectionImg }}>
+      <div className="absolute inset-0" >
         <div className="absolute inset-0" ></div>
       </div>
 

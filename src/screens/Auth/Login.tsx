@@ -31,23 +31,21 @@ export default function Login() {
         setLoading(true)
         return axios.post(`${apiURL}/api/auth/login`, formData)
             .then((res) => {
-                // openNotification('topRight', 'success', res.data.msg)
                 notify.success({
                     message: 'Success!',
                     description: res.data.msg,
                     placement: 'topRight',
                 });
                 setLoading(false)
-                localStorage.setItem('easyShadiUserId',res.data.user.id)
-                navigate('/dashboard')
+                localStorage.setItem('easyShadiUser', res.data.user.token)
                 dispatch(storeUserReducer(res.data.user))
-                
+                navigate('/dashboard/home')
+
             })
-            .catch((res) => {
-                openNotification('topRight', 'error', res.response.data.msg)
+            .catch((error) => {
                 notify.error({
                     message: 'Error!',
-                    description: res.response.data.msg,
+                    description: error.response?.data?.msg,
                     placement: 'topRight',
                 });
                 setLoading(false)

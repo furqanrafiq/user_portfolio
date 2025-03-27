@@ -1,38 +1,47 @@
 import './App.css'
-import Login from './screens/Auth/Login.js';
-// import SignUp from './components/auth/SignUp'
 import "./index.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from './screens/Home/Home.jsx';
+import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import Navbar from './components/auth/general/Navbar.jsx';
 import Footer from './components/auth/general/Footer.jsx';
-import SignUp from './screens/Auth/SignUp.js';
-import GuestList from './screens/GuestList/index.jsx';
-import CheckList from './screens/Checklist.jsx/index.jsx';
-import VendorManager from './screens/VendorManager/index.jsx';
-import WeddingVenue from './screens/VenuesVendors/WeddingVenue.jsx';
-import Dashboard from './screens/Dashboard/index.jsx';
-import DetailPage from './screens/VenuesVendors/DetailPage.jsx';
+import PublicRoutes from './routes/PublicRoutes.jsx';
+import ProtectedRoutes from './routes/ProtectedRoutes.jsx';
+import { AnimatePresence, motion } from "framer-motion";
 
 function App() {
+
+  const pageVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { duration: 0.5, ease: "easeInOut" } },
+    exit: { opacity: 0, transition: { duration: 0.4, ease: "easeInOut" } }
+  };
+
+  const AnimatedRoutes = () => {
+    const location = useLocation();
+
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname} // Ensures animation on route change
+          variants={pageVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        >
+          {/* Render both route sets */}
+          <PublicRoutes />
+          <ProtectedRoutes />
+        </motion.div>
+      </AnimatePresence>
+    );
+  };
 
   return (
     <>
       <Router>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/guest-list" element={<GuestList />} />
-          <Route path="/check-list" element={<CheckList />} />
-          <Route path="/vendor-manager" element={<VendorManager />} />
-          <Route path="/services/:serviceName" element={<WeddingVenue />} />
-          <Route path="/service-details/:serviceId" element={<DetailPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
+        <AnimatedRoutes />
+        <Footer />
       </Router>
-      <Footer />
     </>
   )
 }

@@ -7,9 +7,8 @@ import { useNotify } from '../../../utils/NotificationProvider';
 import { useSelector } from 'react-redux';
 import { useForm } from 'antd/es/form/Form';
 import ReactGoogleAutocomplete from 'react-google-autocomplete';
-import UploadServicePictures from './UploadServicePictures';
 
-function AddServiceModal({ isModalOpen, setIsModalOpen, getUserServices, editService }) {
+function EventDetailsModal({ isModalOpen, setIsModalOpen, getUserServices, editService }) {
     const [service, setService] = useState(Object)
     const [loading, setLoading] = useState(false)
     const notify = useNotify()
@@ -50,7 +49,7 @@ function AddServiceModal({ isModalOpen, setIsModalOpen, getUserServices, editSer
 
     return (
         <>
-            <Modal title={editService ? 'Edit Service' : 'Add Service'} open={isModalOpen} footer={[]} closable={false}>
+            <Modal title="Event Details" open={isModalOpen} footer={[]} closable={false}>
                 <Form
                     name="signin"
                     onFinish={onFinish}
@@ -122,8 +121,6 @@ function AddServiceModal({ isModalOpen, setIsModalOpen, getUserServices, editSer
                         />
                     </Form.Item>
 
-                    <UploadServicePictures fileList={fileList} setFileList={setFileList} />
-
                     <Form.Item>
                         <div className='text-end'>
                             <Button
@@ -142,7 +139,7 @@ function AddServiceModal({ isModalOpen, setIsModalOpen, getUserServices, editSer
                                 disabled={loading}
                                 className="mt-5 border-none h-12 font-medium"
                             >
-                                Add Service
+                                Save
                             </Button>
                         </div>
                     </Form.Item>
@@ -152,4 +149,4 @@ function AddServiceModal({ isModalOpen, setIsModalOpen, getUserServices, editSer
     );
 };
 
-export default AddServiceModal;
+export default EventDetailsModal;

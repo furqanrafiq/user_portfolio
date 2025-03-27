@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 
 const GeneralCard = ({ data }) => {
     return (
-        <NavLink to={`/service-details/${data?.serviceId}`}>
+        <NavLink to={`/service-details/${data?.uuid}`}>
             <div className='general-card'>
                 <img className='general-image overla' src={weddingVenue} />
                 <div className='text-left p-5'>

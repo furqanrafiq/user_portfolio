@@ -31,7 +31,7 @@ api.interceptors.response.use(
             });
 
             // Clear token and redirect to login
-            localStorage.removeItem("token");
+            localStorage.removeItem("easyShadiUser");
             window.location.href = "/login"; // Redirect to login
         }
         return Promise.reject(error);

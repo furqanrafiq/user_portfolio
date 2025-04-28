@@ -29,7 +29,7 @@ export default function Login() {
     const onFinish = (values: any) => {
         const formData = { ...values }
         setLoading(true)
-        return axios.post(`${apiURL}/api/auth/login`, formData)
+        return axios.post(`${apiURL}/auth/login`, formData)
             .then((res) => {
                 notify.success({
                     message: 'Success!',
@@ -38,7 +38,7 @@ export default function Login() {
                 });
                 setLoading(false)
                 localStorage.setItem('easyShadiUser', res.data.user.token)
-                dispatch(storeUserReducer(res.data.user))
+                dispatch(storeUserReducer(res.data.user.user))
                 navigate('/dashboard/home')
 
             })

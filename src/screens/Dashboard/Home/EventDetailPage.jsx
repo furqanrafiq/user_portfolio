@@ -1,21 +1,34 @@
 import { CalendarFilled, ClockCircleFilled, DeleteOutlined, EditOutlined, LeftOutlined, RightOutlined, SendOutlined, TeamOutlined, WalletFilled } from '@ant-design/icons'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import api from '../../../../axiosInterceptor'
+import { apiURL } from '../../../../helper'
 
 const EventDetailPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const navigate = useNavigate()
+    const params = useParams()
+    const [event, setEvent] = useState({})
+
+    function getEventDetails() {
+        return api.get(`${apiURL}/events/event-details?eventId=${params.eventId}`)
+            .then((res) => setEvent(res.data))
+    }
+
+    useEffect(() => {
+        getEventDetails()
+    }, [])
 
     return (
         <div className='container mx-auto my-5'>
             <div className='flex items-center'>
                 <LeftOutlined className='mr-3' />
-                <p className='font-serif text-[20px]'>Wedding</p>
+                <p className='font-serif text-[20px]'>{event.eventType}</p>
             </div>
 
             <div className='mt-5 bg-white p-5 rounded-xl'>
                 <div className='flex justify-between items-center'>
-                    <p className='font-sans text-[18px]'>Wedding</p>
+                    <p className='font-sans text-[18px]'>{event.eventType}</p>
                     <div>
                         <EditOutlined className='bg-primary rounded-[50%] p-3 hover:cursor-pointer mr-3' />
                         <DeleteOutlined className='bg-primary rounded-[50%] p-3 hover:cursor-pointer' />
@@ -26,7 +39,7 @@ const EventDetailPage = () => {
                         <CalendarFilled className='bg-primary p-3 rounded-xl' />
                         <div className='ml-5'>
                             <p className='text-[12px] font-medium'>Date</p>
-                            <p className='font-medium text-gray-800'>12-01-1999</p>
+                            <p className='font-medium text-gray-800'>{event.eventDate}</p>
                         </div>
                     </div>
                     <div>
@@ -38,7 +51,7 @@ const EventDetailPage = () => {
                         <ClockCircleFilled className='bg-primary p-3 rounded-xl' />
                         <div className='ml-5'>
                             <p className='text-[12px] font-medium'>Time</p>
-                            <p className='font-medium text-gray-800'>9:00 pm</p>
+                            <p className='font-medium text-gray-800'>{event.eventTime}</p>
                         </div>
                     </div>
                     <div>
@@ -50,7 +63,7 @@ const EventDetailPage = () => {
                         <SendOutlined className='bg-primary p-3 rounded-xl' />
                         <div className='ml-5'>
                             <p className='text-[12px] font-medium'>Location</p>
-                            <p className='font-medium text-gray-800'>Bahadurabad</p>
+                            <p className='font-medium text-gray-800'>{event.eventLocation}</p>
                         </div>
                     </div>
                     <div>
@@ -62,7 +75,7 @@ const EventDetailPage = () => {
                         <WalletFilled className='bg-primary p-3 rounded-xl' />
                         <div className='ml-5'>
                             <p className='text-[12px] font-medium'>Budget</p>
-                            <p className='font-medium text-gray-800'>$10,000</p>
+                            <p className='font-medium text-gray-800'>${event.eventBudget}</p>
                         </div>
                     </div>
                     <div>
@@ -74,7 +87,7 @@ const EventDetailPage = () => {
                         <TeamOutlined className='bg-primary p-3 rounded-xl' />
                         <div className='ml-5'>
                             <p className='text-[12px] font-medium'>Guests</p>
-                            <p className='font-medium text-gray-800'>100</p>
+                            <p className='font-medium text-gray-800'>{event.guestCount}</p>
                         </div>
                     </div>
                     <div>

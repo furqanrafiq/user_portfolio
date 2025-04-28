@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, DatePicker, Form, Input, Modal, Row, Select, TimePicker } from 'antd';
-import AllServices from '../../../components/dropdowns/allServices';
-import axios from 'axios';
-import { apiURL, eventTypes, mapApiKey } from '../../../../helper';
+import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, TimePicker } from 'antd';
+import { titleTypes } from '../../../../helper';
 import { useNotify } from '../../../utils/NotificationProvider';
 import { useSelector } from 'react-redux';
-import { useForm } from 'antd/es/form/Form';
-import ReactGoogleAutocomplete from 'react-google-autocomplete';
 import moment from 'moment';
+import api from '../../../../axiosInterceptor';
 
-function EventDetailsModal({ isModalOpen, setIsModalOpen, selectedEvent, setSelectedEvent }) {
+function GuestModal({ isModalOpen, setIsModalOpen, selectedEvent, setSelectedEvent }) {
     const [loading, setLoading] = useState(false)
     const notify = useNotify()
     const user = useSelector((state) => state?.user?.user)
     const [event, setEvent] = useState({})
+    const [userEvents, setUserEvents] = useState([])
+
+    function getUserEvents() {
+        return api.get(`/events/get-user-events?userId=${user?.uuid}`)
+            .then((res) => setUserEvents(res.data))
+    }
+
+    useEffect(() => {
+        getUserEvents()
+    }, [])
 
     useEffect(() => {
         if (selectedEvent) {
@@ -23,11 +30,11 @@ function EventDetailsModal({ isModalOpen, setIsModalOpen, selectedEvent, setSele
 
     return (
         <>
-            <Modal title="Event Details" open={isModalOpen} footer={[]} closable={false}>
+            <Modal title="Guest Details" open={isModalOpen} footer={[]} closable={false}>
                 <div className='mt-3'>
-                    <p>Event Type</p>
-                    <Select placeholder="Select event type" className='w-full'
-                        options={eventTypes?.map((item) => ({
+                    <p>Guest Name</p>
+                    <Select placeholder="Select title" className='w-full'
+                        options={titleTypes?.map((item) => ({
                             value: item.name,
                             label: item.name,
                         }))}
@@ -35,27 +42,28 @@ function EventDetailsModal({ isModalOpen, setIsModalOpen, selectedEvent, setSele
                     />
                 </div>
                 <div className='mt-3'>
-                    <p>Guest Count</p>
-                    <Input value={event?.guestCount} />
+                    <p>First Name</p>
+                    <Input value={event?.guestCount} placeholder='First Name' />
                 </div>
                 <div className='mt-3'>
-                    <p>Event Budget</p>
-                    <Input value={event?.eventBudget} />
+                    <p>Last Name</p>
+                    <Input value={event?.eventBudget} placeholder='Last Name' />
                 </div>
                 <div className='mt-3'>
-                    <p>Event Location</p>
-                    <Input value={event?.eventLocation} />
+                    <p>Phone Number</p>
+                    <Input value={event?.eventLocation} placeholder='Phone Number' />
                 </div>
-                <Row className='w-full mt-3' gutter={[12]}>
-                    <Col md={12} >
-                        <p>Event Date</p>
-                        <DatePicker value={moment(event?.eventDate)} className='w-full'/>
-                    </Col>
-                    <Col md={12} >
-                        <p>Event Time</p>
-                        <TimePicker value={moment(event?.eventTime)} className='w-full'/>
-                    </Col>
-                </Row>
+                <div className='mt-3'>
+                    <p>Email</p>
+                    <Input value={event?.eventLocation} placeholder='Email' />
+                </div>
+                <div className='mt-3'>
+                    <p>Invited To</p>
+                    <Checkbox.Group options={userEvents?.map((item) => ({
+                        value: item.eventType,
+                        label: item.eventType,
+                    }))} />
+                </div>
                 <div className='text-end'>
                     <Button
                         type="secondary"
@@ -83,4 +91,4 @@ function EventDetailsModal({ isModalOpen, setIsModalOpen, selectedEvent, setSele
     );
 };
 
-export default EventDetailsModal;
+export default GuestModal;

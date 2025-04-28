@@ -17,17 +17,17 @@ const Services = () => {
     const notify = useNotify()
 
     function getUserServices(userId) {
-        return axios.get(`${apiURL}/api/services/user-service?userId=${user?.id}`).then((res) => {
+        return axios.get(`${apiURL}/services/user-service?userId=${user?.uuid}`).then((res) => {
             setUserServices(res.data)
         })
     }
 
     useEffect(() => {
-        getUserServices(user?.id)
+        getUserServices(user?.uuid)
     }, [user])
 
     function deleteUserService(uuid) {
-        return axios.get(`${apiURL}/api/services/delete-user-service?uuid=${uuid}`)
+        return axios.get(`${apiURL}/services/delete-user-service?uuid=${uuid}`)
             .then((res) => {
                 notify.success({
                     message: 'Success!',

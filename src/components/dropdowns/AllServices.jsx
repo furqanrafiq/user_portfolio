@@ -7,7 +7,7 @@ const AllServices = ({ isDisabled, handleService }) => {
     const [services, setAllServices] = useState()
 
     function getAllServices() {
-        return axios.get(`${apiURL}/api/services/get-all`).then((res) => {
+        return axios.get(`${apiURL}/services/get-all`).then((res) => {
             setAllServices(res.data)
         })
     }

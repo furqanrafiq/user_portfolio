@@ -11,7 +11,7 @@ const DetailPage = () => {
     const params = useParams()
 
     function getServiceDetails() {
-        return axios.get(`${apiURL}/api/services/get-service-details?serviceId=${params.serviceId}`).then((res) => {
+        return axios.get(`${apiURL}/services/get-service-details?serviceId=${params.serviceId}`).then((res) => {
             setService(res.data)
         })
     }

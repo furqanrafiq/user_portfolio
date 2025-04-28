@@ -23,10 +23,10 @@ function AddServiceModal({ isModalOpen, setIsModalOpen, getUserServices, editSer
     const onFinish = (values) => {
         const body = { ...values }
         body.service = service
-        body.userId = user?.id;
+        body.userId = user?.uuid;
         body.images = fileList.map(item => item.thumbUrl)
         setLoading(true)
-        return axios.post(`${apiURL}/api/services/insert-user-service`, body)
+        return axios.post(`${apiURL}/services/insert-user-service`, body)
             .then((res) => {
                 notify.success({
                     message: 'Success!',

@@ -1,14 +1,28 @@
 import { ArrowRightOutlined, CalendarFilled, CalendarOutlined, ClockCircleFilled, ClockCircleOutlined, EditOutlined, GroupOutlined, PinterestFilled, PlusOutlined, RightOutlined, SendOutlined, TeamOutlined, WalletFilled } from '@ant-design/icons'
 import { Button, Col, Row } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import EventDetailsModal from './EventDetailsModal'
+import api from '../../../../axiosInterceptor'
+import { useSelector } from 'react-redux'
 
 const Home = () => {
 
-    const events = [1, 2]
+    // const events = [1, 2]
     const navigate = useNavigate()
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const user = useSelector((state) => state?.user?.user)
+    const [events, setEvents] = useState([])
+    const [selectedEvent, setSelectedEvent] = useState({})
+
+    function getUserEvents() {
+        return api.get(`/events/get-user-events?userId=${user?.uuid}`)
+            .then((res) => setEvents(res.data))
+    }
+
+    useEffect(() => {
+        getUserEvents()
+    }, [])
 
     return (
         <div>
@@ -27,19 +41,19 @@ const Home = () => {
                         return (
                             <Col key={item} className='bg-white p-5 rounded-xl' md={4}>
                                 <div className='flex justify-between items-center'>
-                                    <p className='font-sans text-[18px]'>Wedding</p>
-                                    <RightOutlined className='bg-primary rounded p-3 hover:cursor-pointer' onClick={() => navigate('/dashboard/event/1')} />
+                                    <p className='font-sans text-[18px]'>{item?.eventType}</p>
+                                    <RightOutlined className='bg-primary rounded p-3 hover:cursor-pointer' onClick={() => navigate(`/dashboard/event/${item.uuid}`)} />
                                 </div>
                                 <div className='flex mt-5 justify-between'>
                                     <div className='flex'>
                                         <CalendarFilled className='bg-primary p-3 rounded-xl' />
                                         <div className='ml-5'>
                                             <p className='text-[12px] font-medium'>Date</p>
-                                            <p className='font-medium text-gray-800'>12-01-1999</p>
+                                            <p className='font-medium text-gray-800'>{item.eventDate}</p>
                                         </div>
                                     </div>
                                     <div>
-                                        <EditOutlined onClick={() => setIsModalOpen(true)} className='hover:cursor-pointer p-3 rounded-xl' />
+                                        <EditOutlined onClick={() => { setIsModalOpen(true); setSelectedEvent(item) }} className='hover:cursor-pointer p-3 rounded-xl' />
                                     </div>
                                 </div>
                                 <div className='flex mt-3 justify-between'>
@@ -47,11 +61,11 @@ const Home = () => {
                                         <ClockCircleFilled className='bg-primary p-3 rounded-xl' />
                                         <div className='ml-5'>
                                             <p className='text-[12px] font-medium'>Time</p>
-                                            <p className='font-medium text-gray-800'>9:00 pm</p>
+                                            <p className='font-medium text-gray-800'>{item.eventTime}</p>
                                         </div>
                                     </div>
                                     <div>
-                                        <EditOutlined onClick={() => setIsModalOpen(true)} className='hover:cursor-pointer p-3 rounded-xl' />
+                                        <EditOutlined onClick={() => { setIsModalOpen(true); setSelectedEvent(item) }} className='hover:cursor-pointer p-3 rounded-xl' />
                                     </div>
                                 </div>
                                 <div className='flex mt-3 justify-between'>
@@ -59,11 +73,11 @@ const Home = () => {
                                         <SendOutlined className='bg-primary p-3 rounded-xl' />
                                         <div className='ml-5'>
                                             <p className='text-[12px] font-medium'>Location</p>
-                                            <p className='font-medium text-gray-800'>Bahadurabad</p>
+                                            <p className='font-medium text-gray-800'>{item.eventLocation}</p>
                                         </div>
                                     </div>
                                     <div>
-                                        <EditOutlined onClick={() => setIsModalOpen(true)} className='hover:cursor-pointer p-3 rounded-xl' />
+                                        <EditOutlined onClick={() => { setIsModalOpen(true); setSelectedEvent(item) }} className='hover:cursor-pointer p-3 rounded-xl' />
                                     </div>
                                 </div>
                                 <div className='flex mt-3 justify-between'>
@@ -71,11 +85,11 @@ const Home = () => {
                                         <WalletFilled className='bg-primary p-3 rounded-xl' />
                                         <div className='ml-5'>
                                             <p className='text-[12px] font-medium'>Budget</p>
-                                            <p className='font-medium text-gray-800'>$10,000</p>
+                                            <p className='font-medium text-gray-800'>${item.eventBudget}</p>
                                         </div>
                                     </div>
                                     <div>
-                                        <EditOutlined onClick={() => setIsModalOpen(true)} className='hover:cursor-pointer p-3 rounded-xl' />
+                                        <EditOutlined onClick={() => { setIsModalOpen(true); setSelectedEvent(item) }} className='hover:cursor-pointer p-3 rounded-xl' />
                                     </div>
                                 </div>
                                 <div className='flex mt-3 justify-between'>
@@ -83,11 +97,11 @@ const Home = () => {
                                         <TeamOutlined className='bg-primary p-3 rounded-xl' />
                                         <div className='ml-5'>
                                             <p className='text-[12px] font-medium'>Guests</p>
-                                            <p className='font-medium text-gray-800'>100</p>
+                                            <p className='font-medium text-gray-800'>{item.guestCount}</p>
                                         </div>
                                     </div>
                                     <div>
-                                        <EditOutlined onClick={() => setIsModalOpen(true)} className='hover:cursor-pointer p-3 rounded-xl' />
+                                        <EditOutlined onClick={() => { setIsModalOpen(true); setSelectedEvent(item) }} className='hover:cursor-pointer p-3 rounded-xl' />
                                     </div>
                                 </div>
 
@@ -108,7 +122,7 @@ const Home = () => {
             <div className='mt-5 bg-white rounded-xl p-5'>
                 <p className='font-sans text-[20px]'>Budget Overview</p>
             </div>
-            <EventDetailsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+            <EventDetailsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent}/>
         </div>
     )
 }

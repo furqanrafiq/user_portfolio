@@ -1,54 +1,27 @@
+import { LeftOutlined } from '@ant-design/icons';
 import { Button, Divider, Progress, Radio } from 'antd';
 import React, { useState } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { eventTypes } from '../../../../helper';
 
-const EventType = () => {
+const EventType = ({ eventData, setEventData }) => {
 
-  const { sharedState, setSharedState } = useOutletContext();
+  // const { eventData, setEventData } = useOutletContext();
   const navigate = useNavigate()
   const [eventType, setEventType] = useState()
-
-  const eventTypes = [
-    {
-      name: 'Proposal'
-    }, {
-      name: 'Engagement Party'
-    }, {
-      name: 'Batch Trip or Party'
-    }, {
-      name: 'Wedding Shower'
-    }, {
-      name: 'Welcome Event'
-    }, {
-      name: 'Rehearsal Dinner'
-    }, {
-      name: 'After Party'
-    }, {
-      name: 'Farewell Brunch'
-    }, {
-      name: 'Honeymoon'
-    }, {
-      name: 'Minimoon'
-    }, {
-      name: 'Bridal Lunch'
-    }, {
-      name: 'Mehendi'
-    }, {
-      name: 'Sangeet'
-    }, {
-      name: 'Anniversary'
-    }
-  ]
 
   return (
     <div className='container mx-auto h-[80vh]'>
       <div className='mt-5'>
-        <p className='font-serif text-[20px]'>Let's create your Event</p>
+        <p className='font-serif text-[20px]'>
+          <LeftOutlined className='text-[14px] bg-secondary p-2 rounded-[50%] mr-3' onClick={() => navigate(-1)}/>
+          Let's create your Event
+        </p>
         <Progress percent={20} showInfo={false} strokeColor={"black"} size={"small"} />
       </div>
       <div className='flex flex-col justify-center h-full w-[50%] mx-auto'>
         <p className='mb-3'>Choose the event type:</p>
-        <Radio.Group className='event-type-radio' value={eventType} onChange={(e) => { setEventType(e.target.value); setSharedState({ ...sharedState, 'eventType': e.target.value }) }}>
+        <Radio.Group className='event-type-radio' value={eventType} onChange={(e) => { setEventType(e.target.value); setEventData({ ...eventData, 'eventType': e.target.value }) }}>
           {
             eventTypes?.map((item) => {
               return (

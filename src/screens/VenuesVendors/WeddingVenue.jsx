@@ -13,7 +13,7 @@ const WeddingVenue = () => {
     const params = useParams()
 
     function getAllServices() {
-        return axios.get(`${apiURL}/api/services/get-services?serviceName=${params.serviceName}`).then((res) => {
+        return axios.get(`${apiURL}/services/get-services?serviceName=${params.serviceName}`).then((res) => {
             setAllServices(res.data)
         })
     }

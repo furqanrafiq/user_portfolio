@@ -6,6 +6,10 @@ import Footer from './components/auth/general/Footer.jsx';
 import PublicRoutes from './routes/PublicRoutes.jsx';
 import ProtectedRoutes from './routes/ProtectedRoutes.jsx';
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from 'react';
+import api from '../axiosInterceptor.js';
+import { useDispatch } from 'react-redux';
+import { storeUserReducer } from './screens/Auth/redux/authSlice.js';
 
 function App() {
 
@@ -14,6 +18,21 @@ function App() {
     animate: { opacity: 1, transition: { duration: 0.5, ease: "easeInOut" } },
     exit: { opacity: 0, transition: { duration: 0.4, ease: "easeInOut" } }
   };
+
+  const user = localStorage.getItem('easyShadiUser')
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (user) {
+      api.get("/user/user-details")
+        .then((res) => {
+          dispatch(storeUserReducer(res.data.user));
+        })
+        .catch(() => {
+          dispatch(storeUserReducer(null));
+        })
+    }
+  }, [user, dispatch]);
 
   const AnimatedRoutes = () => {
     const location = useLocation();
@@ -28,8 +47,6 @@ function App() {
           exit="exit"
         >
           {/* Render both route sets */}
-          <PublicRoutes />
-          <ProtectedRoutes />
         </motion.div>
       </AnimatePresence>
     );
@@ -39,7 +56,9 @@ function App() {
     <>
       <Router>
         <Navbar />
-        <AnimatedRoutes />
+        {/* <AnimatedRoutes /> */}
+        <PublicRoutes />
+        <ProtectedRoutes />
         <Footer />
       </Router>
     </>

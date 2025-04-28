@@ -1,19 +1,22 @@
+import { LeftOutlined } from '@ant-design/icons';
 import { Button, Divider, Input, Progress } from 'antd';
 import React from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
-const GuestCount = () => {
-  const { sharedState, setSharedState } = useOutletContext();
+const GuestCount = ({ eventData, setEventData }) => {
+  // const { eventData, setEventData } = useOutletContext();
   const navigate = useNavigate()
 
   function handleGuestCount(value) {
-    setSharedState({ ...sharedState, 'guestCount': value })
+    setEventData({ ...eventData, 'guestCount': value })
   }
 
   return (
     <div className='container mx-auto h-[80vh]'>
       <div className='mt-5'>
-        <p className='font-serif text-[20px]'>Event Guest Count🫂</p>
+        <p className='font-serif text-[20px]'>
+          <LeftOutlined className='text-[14px] bg-secondary p-2 rounded-[50%] mr-3' onClick={() => navigate(-1)} />
+          Event Guest Count🫂</p>
         <Progress percent={40} showInfo={false} strokeColor={"black"} size={"small"} />
       </div>
       <div className='flex flex-col justify-center h-full w-[30%] mx-auto'>

@@ -34,7 +34,7 @@ export default function SignUp() {
         body.isVendor = isVendor;
         // body.service = service
         setLoading(true)
-        return axios.post(`${apiURL}/api/auth/register`, body)
+        return axios.post(`${apiURL}/auth/register`, body)
             .then((res) => {
                 notify.success({
                     message: 'Success!',

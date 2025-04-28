@@ -6,6 +6,7 @@ import axios from 'axios';
 import { apiURL } from '../../../../helper';
 import { useDispatch, useSelector } from 'react-redux';
 import { storeUserReducer } from '../../../screens/Auth/redux/authSlice';
+import { storeServices } from '../../../redux/serviceSlice';
 
 const { Header, } = Layout;
 
@@ -16,13 +17,14 @@ export default function Navbar() {
 
 
     function getAllServices() {
-        return axios.get(`${apiURL}/api/services/get-all`).then((res) => {
+        return axios.get(`${apiURL}/services/get-all`).then((res) => {
             let servicesArray = res.data.map((item) => ({
                 name: item.name,
                 link: `/services/${item.name}`,
             })
             )
             setAllServices(servicesArray)
+            dispatch(storeServices(res.data))
         })
     }
 
@@ -226,7 +228,7 @@ export default function Navbar() {
                     <div className="flex items-center space-x-4">
                         {/* <UserOutlined className="text-lg" /> */}
                         {
-                            user?.id ?
+                            user?._id ?
                                 <NavLink to={'/dashboard/home'}>
                                     <Dropdown overlay={logoutMenu} trigger={["hover"]} placement="bottomCenter">
                                         <Button

@@ -22,7 +22,7 @@ const EventDetailPage = () => {
     return (
         <div className='container mx-auto my-5'>
             <div className='flex items-center'>
-                <LeftOutlined className='mr-3' />
+                <LeftOutlined className='mr-3' onClick={() => navigate(-1)}/>
                 <p className='font-serif text-[20px]'>{event.eventType}</p>
             </div>
 
@@ -96,7 +96,7 @@ const EventDetailPage = () => {
                 </div>
             </div>
 
-            <div className='mt-5 bg-white p-5 rounded-xl'>
+            {/* <div className='mt-5 bg-white p-5 rounded-xl'>
                 <p className='font-sans text-[18px]'>Guest Status</p>
             </div>
 
@@ -106,7 +106,7 @@ const EventDetailPage = () => {
 
             <div className='mt-5 bg-white p-5 rounded-xl'>
                 <p className='font-sans text-[18px]'>Vendor Manager</p>
-            </div>
+            </div> */}
         </div>
     )
 }

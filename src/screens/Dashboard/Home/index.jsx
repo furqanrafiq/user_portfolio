@@ -1,5 +1,5 @@
 import { ArrowRightOutlined, CalendarFilled, CalendarOutlined, ClockCircleFilled, ClockCircleOutlined, EditOutlined, GroupOutlined, PinterestFilled, PlusOutlined, RightOutlined, SendOutlined, TeamOutlined, WalletFilled } from '@ant-design/icons'
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Row, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import EventDetailsModal from './EventDetailsModal'
@@ -13,6 +13,7 @@ const Home = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const user = useSelector((state) => state?.user?.user)
     const [events, setEvents] = useState([])
+    const [checkList, setCheckList] = useState([])
     const [selectedEvent, setSelectedEvent] = useState({})
 
     function getUserEvents() {
@@ -22,6 +23,39 @@ const Home = () => {
 
     useEffect(() => {
         getUserEvents()
+    }, [])
+
+
+    const checklistColumns = [
+        {
+            title: 'Task',
+            dataIndex: 'description',
+            key: 'description',
+        },
+        {
+            title: 'Category',
+            dataIndex: 'category',
+            key: 'category',
+        },
+        {
+            title: 'Event',
+            dataIndex: 'event',
+            key: 'event',
+        },
+        {
+            title: 'Due Date',
+            dataIndex: 'dueDate',
+            key: 'dueDate',
+        }
+    ];
+
+    function getUserChecklist() {
+        return api.get(`/checklist/get-user-checklist?userId=${user?.uuid}`)
+            .then((res) => setCheckList(res.data))
+    }
+
+    useEffect(() => {
+        getUserChecklist()
     }, [])
 
     return (
@@ -112,8 +146,13 @@ const Home = () => {
             </Row>
 
             <div className='mt-5 bg-white rounded-xl p-5'>
-                <p className='font-sans text-[20px]'>My checklist</p>
-                <p className='text-center font-serif text-[16px]'>You don't have any tasks right now</p>
+                <p className='font-sans text-[20px] mt-3'>My checklist</p>
+                {
+                    checkList?.length > 0 ?
+                        <Table columns={checklistColumns} dataSource={checkList} />
+                        :
+                        <p className='text-center font-serif text-[16px]'>You don't have any tasks right now</p>
+                }
                 <NavLink to={'/dashboard/checklist'}>
                     <p className='font-sans text-red-400 hover:cursor-pointer'>Open checklist <ArrowRightOutlined className='text-[14px]' /></p>
                 </NavLink>
@@ -122,7 +161,7 @@ const Home = () => {
             <div className='mt-5 bg-white rounded-xl p-5'>
                 <p className='font-sans text-[20px]'>Budget Overview</p>
             </div>
-            <EventDetailsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent}/>
+            <EventDetailsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} />
         </div>
     )
 }

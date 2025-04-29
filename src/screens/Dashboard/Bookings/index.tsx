@@ -14,6 +14,52 @@ const Bookings = () => {
     const notify = useNotify()
     const [data, setData] = useState([])
 
+    function acceptBooking(bookingId) {
+        const body = {
+            bookingId
+        }
+        return api.post(`${apiURL}/bookings/accept-booking`, body)
+            .then((res) => {
+                notify.success({
+                    message: 'Success!',
+                    description: res.data.msg,
+                    placement: 'topRight',
+                });
+                getVendorBookings()
+            })
+            .catch((res) => {
+                notify.error({
+                    message: 'Error',
+                    description: res.response.data.msg,
+                    placement: 'topRight',
+                });
+            })
+    }
+
+
+    function rejectBooking(bookingId) {
+        const body = {
+            bookingId
+        }
+        return api.post(`${apiURL}/bookings/reject-booking`, body)
+            .then((res) => {
+                notify.success({
+                    message: 'Success!',
+                    description: res.data.msg,
+                    placement: 'topRight',
+                });
+                getVendorBookings()
+            })
+            .catch((res) => {
+                notify.error({
+                    message: 'Error',
+                    description: res.response.data.msg,
+                    placement: 'topRight',
+                });
+            })
+    }
+
+
     const columns = [
         {
             title: 'User Name',
@@ -77,8 +123,8 @@ const Bookings = () => {
                     {
                         !record?.isApproved && !record?.isRejected &&
                         <>
-                            <Tag color='green' className='hover:cursor-pointer'>Accept</Tag>
-                            <Tag color='red' className='hover:cursor-pointer'>Reject</Tag>
+                            <Tag color='green' className='hover:cursor-pointer' onClick={() => acceptBooking(record.uuid)}>Accept</Tag>
+                            <Tag color='red' className='hover:cursor-pointer' onClick={() => rejectBooking(record.uuid)}>Reject</Tag>
                         </>
                     }
                 </Space>

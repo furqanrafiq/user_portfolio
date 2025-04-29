@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Space, Table } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import noData from '../../../assets/no-data.png'
 import CheckListModal from './CheckListModal';
+import api from '../../../../axiosInterceptor';
+import { useSelector } from 'react-redux';
 
 const Checklist = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const user = useSelector((state) => state?.user?.user)
+    const [userChecklist, setUserChecklist] = useState([])
 
     const CustomNoData = () => (
         <div className='p-5'>
@@ -20,19 +24,13 @@ const Checklist = () => {
     const columns = [
         {
             title: 'Task',
-            dataIndex: 'taskTitle',
-            key: 'taskTitle',
-            render: (text) => <a>{text}</a>,
+            dataIndex: 'description',
+            key: 'description',
         },
         {
             title: 'Category',
             dataIndex: 'category',
             key: 'category',
-        },
-        {
-            title: 'Assignee',
-            dataIndex: 'assignee',
-            key: 'assignee',
         },
         {
             title: 'Event',
@@ -56,12 +54,30 @@ const Checklist = () => {
         },
     ];
 
-    const data = []
+    function getUserChecklist() {
+        return api.get(`/checklist/get-user-checklist?userId=${user?.uuid}`)
+            .then((res) => setUserChecklist(res.data))
+    }
+
+    useEffect(() => {
+        getUserChecklist()
+    }, [])
 
     return (
         <div>
-            <Table columns={columns} dataSource={data} locale={{ emptyText: <CustomNoData /> }} />
-            <CheckListModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+            <div className='flex justify-between mb-5'>
+                <p className='font-serif text-heading'>Checklist</p>
+                <Button
+                    type="primary"
+                    className="border-none h-12 text-base font-small w-[200px]"
+                    size="small"
+                    onClick={() => setIsModalOpen(true)}
+                >
+                    Add Checklist
+                </Button>
+            </div>
+            <Table columns={columns} dataSource={userChecklist} locale={{ emptyText: <CustomNoData /> }} />
+            <CheckListModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} getUserChecklist={getUserChecklist} />
         </div>
     )
 }

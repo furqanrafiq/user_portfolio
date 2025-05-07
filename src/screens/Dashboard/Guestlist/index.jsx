@@ -5,11 +5,41 @@ import noData from '../../../assets/no-data.png'
 import GuestModal from './GuestModal';
 import api from '../../../../axiosInterceptor';
 import { useSelector } from 'react-redux';
+import { useNotify } from '../../../utils/NotificationProvider';
 
 const GuestList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const user = useSelector((state) => state?.user?.user)
     const [userGuests, setUserGuests] = useState([])
+    const [selectedGuest, setSelectedGuest] = useState({})
+    const notify = useNotify()
+
+    function deleteUserGuest(guestId) {
+        return api.post(`/guests/delete-user-guest?guestId=${guestId}`)
+            .then((res) => {
+                notify.success({
+                    message: 'Success!',
+                    description: res.data.msg,
+                    placement: 'topRight',
+                });
+                getUserGuests()
+            }).catch((res) => {
+                notify.error({
+                    message: 'Error',
+                    description: res.response.data.msg,
+                    placement: 'topRight',
+                });
+            })
+    }
+
+    function getUserGuests() {
+        return api.get(`/guests/get-user-guests?userId=${user?.uuid}`)
+            .then((res) => setUserGuests(res.data))
+    }
+
+    useEffect(() => {
+        getUserGuests()
+    }, [])
 
     const CustomNoData = () => (
         <div className='p-5'>
@@ -30,7 +60,7 @@ const GuestList = () => {
             ),
         },
         {
-            title: 'email',
+            title: 'Email',
             dataIndex: 'email',
             key: 'email',
         },
@@ -44,22 +74,12 @@ const GuestList = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <EditOutlined style={{ cursor: 'pointer' }} />
-                    <DeleteOutlined style={{ cursor: 'pointer' }} />
+                    <EditOutlined style={{ cursor: 'pointer' }} onClick={() => { setIsModalOpen(true); setSelectedGuest(record) }} />
+                    <DeleteOutlined style={{ cursor: 'pointer' }} onClick={() => deleteUserGuest(record.uuid)} />
                 </Space>
             ),
         },
     ]
-
-
-    function getUserGuests() {
-        return api.get(`/guests/get-user-guests?userId=${user?.uuid}`)
-            .then((res) => setUserGuests(res.data))
-    }
-
-    useEffect(() => {
-        getUserGuests()
-    }, [])
 
     return (
         <div>
@@ -75,7 +95,7 @@ const GuestList = () => {
                 </Button>
             </div>
             <Table columns={columns} dataSource={userGuests} locale={{ emptyText: <CustomNoData /> }} />
-            <GuestModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} getUserGuests={getUserGuests} />
+            <GuestModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} getUserGuests={getUserGuests} selectedGuest={selectedGuest} />
         </div>
     )
 }

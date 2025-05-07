@@ -1,28 +1,45 @@
 import { ArrowRightOutlined, CalendarFilled, CalendarOutlined, ClockCircleFilled, ClockCircleOutlined, EditOutlined, GroupOutlined, PinterestFilled, PlusOutlined, RightOutlined, SendOutlined, TeamOutlined, WalletFilled } from '@ant-design/icons'
-import { Button, Col, Row, Table } from 'antd'
+import { Button, Col, Row, Table, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import EventDetailsModal from './EventDetailsModal'
 import api from '../../../../axiosInterceptor'
 import { useSelector } from 'react-redux'
+import moment from 'moment'
+import TransactionModal from './TransactionModal'
 
 const Home = () => {
 
     // const events = [1, 2]
     const navigate = useNavigate()
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [transactionModal, setTransactionModal] = useState(false)
     const user = useSelector((state) => state?.user?.user)
     const [events, setEvents] = useState([])
     const [checkList, setCheckList] = useState([])
+    const [userTransactions, setUserTransactions] = useState([])
     const [selectedEvent, setSelectedEvent] = useState({})
+    const [selectedTransaction, setSelectedTransaction] = useState({})
 
     function getUserEvents() {
         return api.get(`/events/get-user-events?userId=${user?.uuid}`)
             .then((res) => setEvents(res.data))
     }
 
+    function getUserChecklist() {
+        return api.get(`/checklist/get-user-checklist?userId=${user?.uuid}`)
+            .then((res) => setCheckList(res.data))
+    }
+
+    function getUserTransactions() {
+        return api.get(`/transactions/get-user-transactions?userId=${user?.uuid}`)
+            .then((res) => setUserTransactions(res.data))
+    }
+
     useEffect(() => {
+        getUserChecklist()
         getUserEvents()
+        getUserTransactions()
     }, [])
 
 
@@ -41,22 +58,21 @@ const Home = () => {
             title: 'Event',
             dataIndex: 'event',
             key: 'event',
+            render: (_, record) => (
+                <p>{record?.eventDetails?.eventType}</p>
+            ),
+
         },
         {
             title: 'Due Date',
             dataIndex: 'dueDate',
             key: 'dueDate',
+            render: (_, record) => (
+                <p>{moment(record?.dueDate).format('DD-MM-yyyy')}</p>
+            ),
         }
     ];
 
-    function getUserChecklist() {
-        return api.get(`/checklist/get-user-checklist?userId=${user?.uuid}`)
-            .then((res) => setCheckList(res.data))
-    }
-
-    useEffect(() => {
-        getUserChecklist()
-    }, [])
 
     return (
         <div>
@@ -146,12 +162,12 @@ const Home = () => {
             </Row>
 
             <div className='mt-5 bg-white rounded-xl p-5'>
-                <p className='font-sans text-[20px] mt-3'>My checklist</p>
+                <p className='font-sans text-[20px]'>My checklist</p>
                 {
                     checkList?.length > 0 ?
-                        <Table columns={checklistColumns} dataSource={checkList} />
+                        <Table columns={checklistColumns} dataSource={checkList} className='mt-3' />
                         :
-                        <p className='text-center font-serif text-[16px]'>You don't have any tasks right now</p>
+                        <p className='text-center font-serif text-[16px] mt-3'>You don't have any tasks right now</p>
                 }
                 <NavLink to={'/dashboard/checklist'}>
                     <p className='font-sans text-red-400 hover:cursor-pointer'>Open checklist <ArrowRightOutlined className='text-[14px]' /></p>
@@ -160,8 +176,62 @@ const Home = () => {
 
             <div className='mt-5 bg-white rounded-xl p-5'>
                 <p className='font-sans text-[20px]'>Budget Overview</p>
+                <Row gutter={24} className='mt-3'>
+                    <Col md={6}>
+                        <div className='border-2 rounded-lg border-black-500 p-2'>
+                            <p className='font-sans text-[14px] font-bold'>Event Breakdown</p>
+                            {
+                                events?.map((item) => {
+                                    return (
+                                        <div key={item.uuid} className='mt-3'>
+                                            <div className='flex justify-between'>
+                                                <div>
+                                                    <p>{item.eventType}</p>
+                                                </div>
+                                                <div>
+                                                    <p>$ {item.eventBudget}</p>
+                                                </div>
+                                            </div>
+                                            <Tooltip title={`$${item.totalSpent}`}>
+                                                <div className='flex'>
+                                                    <div style={{ background: `${item.totalSpent < item.eventBudget ? 'black' : '#ff5050'}`, width: `${item.amountSpent < item.eventBudget ? item.amountSpent : 100}%`, height: '5px', borderRadius: '10px', marginTop: '5px' }}></div>
+                                                    <div style={{ background: 'lightgrey', width: `${item.totalSpent < item.eventBudget ? 100 - item.amountSpent : 0}%`, height: '5px', borderRadius: '10px', marginTop: '5px' }}></div>
+                                                </div>
+                                            </Tooltip>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </Col>
+                    <Col md={18}>
+                        <div className='border-2 rounded-lg border-black-500 p-2'>
+                            <p className='font-sans text-[14px] font-bold'>Recent Transactions</p>
+                            <div className=''>
+                                {
+                                    userTransactions?.map((item) => {
+                                        return (
+                                            <div key={item.uuid} className='border-2 rounded-lg p-2 justify-between flex cursor-pointer hover:bg-gray-100 mt-3' onClick={() => { setSelectedTransaction(item); setTransactionModal(true) }}>
+                                                <div>
+                                                    <p className='font-[500]'>{item?.vendorName}</p>
+                                                    <p className='text-[12px]'>Spent on {item?.eventDetails?.eventType} · {moment(item?.transactionDate).format('Do MMMM, YYYY')}</p>
+                                                </div>
+                                                <div className='text-end'>
+                                                    <p className=''>${item?.amount}</p>
+                                                    <p className='text-[12px]'>{item?.paymentType}</p>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                            <p className='font-sans text-[14px] cursor-pointer hover:underline mt-3' onClick={() => setTransactionModal(true)}>Add Transaction +</p>
+                        </div>
+                    </Col>
+                </Row>
             </div>
             <EventDetailsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} />
+            <TransactionModal isModalOpen={transactionModal} setIsModalOpen={setTransactionModal} userEvents={events} selectedTransaction={selectedTransaction} setSelectedTransaction={setSelectedTransaction} getUserTransactions={getUserTransactions} getUserEvents={getUserEvents} />
         </div>
     )
 }

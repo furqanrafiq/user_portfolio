@@ -77,9 +77,10 @@ const SavedVendors = ({ key }) => {
             value: item.uuid,
             label: item.eventType
           }))}
-          value={record.EventDetails.uuid}
+          disabled={record?.isRejected || record?.isApproved}
+          value={record?.EventDetails?.uuid}
           className='w-full'
-          onChange={(eventId) => setEventForBooking(eventId, record.uuid)}
+          onChange={(eventId) => setEventForBooking(eventId, record?.uuid)}
         />
       )
     },

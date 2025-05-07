@@ -87,3 +87,13 @@ export const titleTypes = [
         name: 'Dr.'
     },
 ]
+
+export const paymentTypes = [
+    {
+        name: 'Credit Card'
+    }, {
+        name: 'Cash'
+    }, {
+        name: 'Cheque'
+    }
+]

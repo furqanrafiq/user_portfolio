@@ -5,11 +5,15 @@ import noData from '../../../assets/no-data.png'
 import CheckListModal from './CheckListModal';
 import api from '../../../../axiosInterceptor';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
+import { useNotify } from '../../../utils/NotificationProvider';
 
 const Checklist = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const user = useSelector((state) => state?.user?.user)
     const [userChecklist, setUserChecklist] = useState([])
+    const [selectedChecklist, setSelectedChecklist] = useState({})
+    const notify = useNotify()
 
     const CustomNoData = () => (
         <div className='p-5'>
@@ -20,6 +24,24 @@ const Checklist = () => {
             </Button>
         </div>
     );
+
+    function deleteUserChecklist(checklistId) {
+        return api.post(`/checklist/delete-user-checklist?checklistId=${checklistId}`)
+            .then((res) => {
+                notify.success({
+                    message: 'Success!',
+                    description: res.data.msg,
+                    placement: 'topRight',
+                });
+                getUserChecklist()
+            }).catch((res) => {
+                notify.error({
+                    message: 'Error',
+                    description: res.response.data.msg,
+                    placement: 'topRight',
+                });
+            })
+    }
 
     const columns = [
         {
@@ -36,19 +58,26 @@ const Checklist = () => {
             title: 'Event',
             dataIndex: 'event',
             key: 'event',
+            render: (_, record) => (
+                <p>{record?.eventDetails?.eventType}</p>
+            ),
+
         },
         {
             title: 'Due Date',
             dataIndex: 'dueDate',
             key: 'dueDate',
+            render: (_, record) => (
+                <p>{moment(record?.dueDate).format('DD-MM-yyyy')}</p>
+            ),
         },
         {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <EditOutlined style={{ cursor: 'pointer' }} />
-                    <DeleteOutlined style={{ cursor: 'pointer' }} />
+                    <EditOutlined style={{ cursor: 'pointer' }} onClick={() => { setIsModalOpen(true); setSelectedChecklist(record) }} />
+                    <DeleteOutlined style={{ cursor: 'pointer' }} onClick={() => deleteUserChecklist(record.uuid)} />
                 </Space>
             ),
         },
@@ -77,7 +106,7 @@ const Checklist = () => {
                 </Button>
             </div>
             <Table columns={columns} dataSource={userChecklist} locale={{ emptyText: <CustomNoData /> }} />
-            <CheckListModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} getUserChecklist={getUserChecklist} />
+            <CheckListModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} getUserChecklist={getUserChecklist} selectedChecklist={selectedChecklist} />
         </div>
     )
 }

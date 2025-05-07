@@ -6,12 +6,23 @@ import { useSelector } from 'react-redux';
 import moment from 'moment';
 import api from '../../../../axiosInterceptor';
 
-function GuestModal({ isModalOpen, setIsModalOpen, getUserGuests }) {
+function GuestModal({ isModalOpen, setIsModalOpen, getUserGuests, selectedGuest }) {
     const [loading, setLoading] = useState(false)
     const notify = useNotify()
     const user = useSelector((state) => state?.user?.user)
-    const [event, setEvent] = useState({})
     const [userEvents, setUserEvents] = useState([])
+    const [form] = Form.useForm()
+
+    useEffect(() => {
+        if (selectedGuest) {
+            form.setFieldsValue({
+                firstName: selectedGuest?.firstName,
+                lastName: selectedGuest?.lastName,
+                email: selectedGuest.email,
+                phoneNumber: selectedGuest.phoneNumber,
+            });
+        }
+    }, [selectedGuest, form]);
 
     function getUserEvents() {
         return api.get(`/events/get-user-events?userId=${user?.uuid}`)
@@ -23,11 +34,16 @@ function GuestModal({ isModalOpen, setIsModalOpen, getUserGuests }) {
     }, [])
 
     const onFinish = (values) => {
-        console.log(values)
         const body = { ...values }
         body.userId = user?.uuid;
         setLoading(true)
-        return api.post(`${apiURL}/guests/insert-user-guests`, body)
+        let url = ""
+        if (selectedGuest) {
+            url = 'update-user-guests'
+        } else {
+            url = 'insert-user-guests'
+        }
+        return api.post(`${apiURL}/guests/${url}`, body)
             .then((res) => {
                 notify.success({
                     message: 'Success!',
@@ -35,12 +51,11 @@ function GuestModal({ isModalOpen, setIsModalOpen, getUserGuests }) {
                     placement: 'topRight',
                 });
                 setLoading(false)
+                form.resetFields()
                 setIsModalOpen(false)
                 getUserGuests()
-                values = {}
             })
             .catch((res) => {
-                console.log(res)
                 notify.error({
                     message: 'Error',
                     description: res.response.data.msg,
@@ -56,6 +71,7 @@ function GuestModal({ isModalOpen, setIsModalOpen, getUserGuests }) {
             <Modal title="Guest Details" open={isModalOpen} footer={[]} closable={false}>
                 <Form
                     name="signin"
+                    form={form}
                     onFinish={onFinish}
                     layout="vertical"
                     className="mb-6"

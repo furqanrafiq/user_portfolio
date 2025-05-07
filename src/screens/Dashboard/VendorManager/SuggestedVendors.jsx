@@ -9,6 +9,7 @@ const SuggestedVendors = () => {
     const services = useSelector((state) => state?.service?.services)
     const [serviceFilter, setServiceFilter] = useState('All')
     const [suggestedVendors, setSuggestedVendors] = useState([])
+    const user = useSelector((state) => state?.user?.user)
 
     function getVendors() {
         return api.get(`${apiURL}/services/get-services?serviceName=${serviceFilter}`).then((res) => {
@@ -16,8 +17,18 @@ const SuggestedVendors = () => {
         })
     }
 
+    function getRecommendations() {
+        return api.get(`${apiURL}/services/get-recommended-services?userId=${user?.uuid}`).then((res) => {
+            setSuggestedVendors(res.data)
+        })
+    }
+
     useEffect(() => {
-        getVendors()
+        if (serviceFilter == 'Recommendations') {
+            getRecommendations()
+        } else {
+            getVendors()
+        }
     }, [serviceFilter])
 
 
@@ -25,6 +36,7 @@ const SuggestedVendors = () => {
         <div>
             <Segmented
                 options={[
+                    'Recommendations',
                     'All',
                     ...services?.map(item => item.name)
                 ]}
@@ -39,7 +51,7 @@ const SuggestedVendors = () => {
                         suggestedVendors?.map(item => {
                             return (
                                 <Col span={6} key={item}>
-                                    <GeneralCard data={item} addVendor={true}/>
+                                    <GeneralCard data={item} addVendor={true} />
                                 </Col>
                             )
                         })

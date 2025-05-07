@@ -6,12 +6,24 @@ import { useSelector } from 'react-redux';
 import moment from 'moment';
 import api from '../../../../axiosInterceptor';
 
-function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist }) {
+function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist, selectedChecklist }) {
     const [loading, setLoading] = useState(false)
     const notify = useNotify()
     const user = useSelector((state) => state?.user?.user)
     const [event, setEvent] = useState({})
     const [userEvents, setUserEvents] = useState([])
+    const [form] = Form.useForm()
+
+    useEffect(() => {
+        if (selectedChecklist) {
+            form.setFieldsValue({
+                description: selectedChecklist?.description,
+                category: selectedChecklist?.category,
+                dueDate: moment(selectedChecklist.dueDate),
+                event: selectedChecklist.eventDetails?.eventType,
+            });
+        }
+    }, [selectedChecklist, form]);
 
     function getUserEvents() {
         return api.get(`/events/get-user-events?userId=${user?.uuid}`)
@@ -23,11 +35,17 @@ function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist }) {
     }, [])
 
     const onFinish = (values) => {
-        console.log(values)
         const body = { ...values }
         body.userId = user?.uuid;
         setLoading(true)
-        return api.post(`${apiURL}/checklist/insert-user-checklist`, body)
+        let url = ""
+        if (selectedChecklist?.uuid) {
+            body.uuid = selectedChecklist?.uuid
+            url = 'update-user-checklist'
+        } else {
+            url = 'insert-user-checklist'
+        }
+        return api.post(`${apiURL}/checklist/${url}`, body)
             .then((res) => {
                 notify.success({
                     message: 'Success!',
@@ -37,6 +55,7 @@ function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist }) {
                 setLoading(false)
                 setIsModalOpen(false)
                 getUserChecklist()
+                form.resetFields()
             })
             .catch((res) => {
                 notify.error({
@@ -50,9 +69,10 @@ function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist }) {
 
     return (
         <>
-            <Modal title="Guest Details" open={isModalOpen} footer={[]} closable={false}>
+            <Modal title="Checklist" open={isModalOpen} footer={[]} closable={false}>
                 <Form
                     name="signin"
+                    form={form}
                     onFinish={onFinish}
                     layout="vertical"
                     className="mb-6"
@@ -112,6 +132,7 @@ function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist }) {
                                 className="mt-5 border-none h-6 font-medium"
                                 onClick={() => {
                                     setIsModalOpen(false);
+                                    form.resetFields()
                                 }}
                             >
                                 Close

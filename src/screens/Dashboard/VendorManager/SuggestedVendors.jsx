@@ -36,7 +36,7 @@ const SuggestedVendors = () => {
         <div>
             <Segmented
                 options={[
-                    'Recommendations',
+                    // 'Recommendations',
                     'All',
                     ...services?.map(item => item.name)
                 ]}

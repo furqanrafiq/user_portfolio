@@ -94,37 +94,37 @@ export default function Navbar() {
             // ]
             subMenu: services
         },
-        {
-            title: "Popular Wedding Destinations",
-            link: "#",
-            icon: "📋",
-            subMenu: [
-                {
-                    name: "Athens, Greece",
-                    link: "/services",
-                },
-                {
-                    name: "Cabo San Lucas, Mexico",
-                    link: "/services",
-                },
-                {
-                    name: "Los Angeles, California",
-                    link: "/services",
-                },
-                {
-                    name: "New York, New York",
-                    link: "/services",
-                },
-                {
-                    name: "Chicago, Illinois",
-                    link: "/services",
-                },
-                {
-                    name: "Melbourne, Australia",
-                    link: "/services",
-                }
-            ]
-        }
+        // {
+        //     title: "Popular Wedding Destinations",
+        //     link: "#",
+        //     icon: "📋",
+        //     subMenu: [
+        //         {
+        //             name: "Athens, Greece",
+        //             link: "/services",
+        //         },
+        //         {
+        //             name: "Cabo San Lucas, Mexico",
+        //             link: "/services",
+        //         },
+        //         {
+        //             name: "Los Angeles, California",
+        //             link: "/services",
+        //         },
+        //         {
+        //             name: "New York, New York",
+        //             link: "/services",
+        //         },
+        //         {
+        //             name: "Chicago, Illinois",
+        //             link: "/services",
+        //         },
+        //         {
+        //             name: "Melbourne, Australia",
+        //             link: "/services",
+        //         }
+        //     ]
+        // }
     ];
 
     const userMenuItems = [
@@ -151,7 +151,7 @@ export default function Navbar() {
     );
 
     const vendorMenu = (
-        <Menu className="bg-white shadow-lg rounded-lg w-[800px] grid grid-cols-2 gap-6">
+        <Menu className="bg-white shadow-lg rounded-lg gap-6">
             {vendorMenuItems.map((item) => (
                 <div key={item} className='p-5'>
                     <p className='font-serif text-[24px]'>{item.title}</p>

@@ -4,7 +4,7 @@ import { Spin } from "antd";
 
 const PrivateRouteHelper = () => {
     const user = useSelector((state) => state?.user?.user); // Get user from Redux
-    return user?._id ? <Outlet /> : <Navigate to="/login" replace />;
+    return user?._id ? <Outlet /> : <Navigate to="/login" replace />
 };
 
 export default PrivateRouteHelper;

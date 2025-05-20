@@ -5,6 +5,7 @@ import { useNotify } from '../../../utils/NotificationProvider';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import api from '../../../../axiosInterceptor';
+import dayjs from 'dayjs';
 
 function TransactionModal({ isModalOpen, setIsModalOpen, selectedTransaction, userEvents, getUserTransactions, setSelectedTransaction, getUserEvents }) {
     const [loading, setLoading] = useState(false)
@@ -50,7 +51,7 @@ function TransactionModal({ isModalOpen, setIsModalOpen, selectedTransaction, us
                 eventId: selectedTransaction?.eventId,
                 category: selectedTransaction?.category,
                 transactionName: selectedTransaction?.transactionName,
-                transactionDate: moment(selectedTransaction.transactionDate),
+                transactionDate: dayjs(selectedTransaction.transactionDate),
                 amount: selectedTransaction?.amount,
                 paymentType: selectedTransaction?.paymentType,
                 note: selectedTransaction?.note,

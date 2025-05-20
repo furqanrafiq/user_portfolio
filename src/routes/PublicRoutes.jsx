@@ -8,12 +8,20 @@ import CheckList from '../screens/Checklist.jsx/index.jsx'
 import VendorManager from '../screens/VendorManager/index.jsx'
 import WeddingVenue from '../screens/VenuesVendors/WeddingVenue.jsx'
 import DetailPage from '../screens/VenuesVendors/DetailPage.jsx'
+import ActivateAccount from '../screens/Auth/ActivateAccount.js'
+import VerifyOTP from '../screens/Auth/VerifyOTP.js'
+import ForgetPassword from '../screens/Auth/ForgetPassword.js'
+import ResetPassword from '../screens/Auth/ResetPassword.js'
 
 const PublicRoutes = () => {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forget-password" element={<ForgetPassword />} />
+            <Route path="/reset-password/:token/:email" element={<ResetPassword />} />
+            <Route path="/activate-account/:token/:email" element={<ActivateAccount />} />
+            <Route path="/verify-otp/:email" element={<VerifyOTP />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/guest-list" element={<GuestList />} />
             <Route path="/check-list" element={<CheckList />} />

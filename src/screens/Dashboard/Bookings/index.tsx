@@ -13,8 +13,10 @@ const Bookings = () => {
     const user = useSelector((state) => state?.user?.user)
     const notify = useNotify()
     const [data, setData] = useState([])
+    const [loading, setLoading] = useState(false)
 
     function acceptBooking(bookingId) {
+        setLoading(true)
         const body = {
             bookingId
         }
@@ -25,6 +27,7 @@ const Bookings = () => {
                     description: res.data.msg,
                     placement: 'topRight',
                 });
+                setLoading(false)
                 getVendorBookings()
             })
             .catch((res) => {
@@ -33,11 +36,13 @@ const Bookings = () => {
                     description: res.response.data.msg,
                     placement: 'topRight',
                 });
+                setLoading(false)
             })
     }
 
 
     function rejectBooking(bookingId) {
+        setLoading(false)
         const body = {
             bookingId
         }
@@ -48,6 +53,7 @@ const Bookings = () => {
                     description: res.data.msg,
                     placement: 'topRight',
                 });
+                setLoading(false)
                 getVendorBookings()
             })
             .catch((res) => {
@@ -56,6 +62,33 @@ const Bookings = () => {
                     description: res.response.data.msg,
                     placement: 'topRight',
                 });
+                setLoading(false)
+            })
+    }
+
+
+    function receiveRequestFromVendor(bookingId) {
+        setLoading(false)
+        const body = {
+            bookingId
+        }
+        return api.post(`${apiURL}/bookings/receive-payment-from-user`, body)
+            .then((res) => {
+                notify.success({
+                    message: 'Success!',
+                    description: res.data.msg,
+                    placement: 'topRight',
+                })
+                setLoading(false)
+                getVendorBookings()
+            })
+            .catch((err) => {
+                notify.error({
+                    message: 'Error!',
+                    description: err.response.data.msg,
+                    placement: 'topRight',
+                })
+                setLoading(false)
             })
     }
 
@@ -90,7 +123,7 @@ const Bookings = () => {
             dataIndex: 'eventDate',
             key: 'eventDate',
             render: (_, record) => (
-                <p>{record?.EventDetails?.eventDate} {record.EventDetails.eventTime}</p>
+                <p>{record?.EventDetails?.eventDate} </p>
             )
         },
         {
@@ -123,9 +156,27 @@ const Bookings = () => {
                     {
                         !record?.isApproved && !record?.isRejected &&
                         <>
-                            <Tag color='green' className='hover:cursor-pointer' onClick={() => acceptBooking(record.uuid)}>Accept</Tag>
-                            <Tag color='red' className='hover:cursor-pointer' onClick={() => rejectBooking(record.uuid)}>Reject</Tag>
+                            <Tag color='green' className='hover:cursor-pointer' onClick={() => acceptBooking(record.uuid)}>{loading ? 'Accepting...' : 'Accept'}</Tag>
+                            <Tag color='red' className='hover:cursor-pointer' onClick={() => rejectBooking(record.uuid)}>{loading ? 'Rejecting...' : 'Reject'}</Tag>
                         </>
+                    }
+
+                    {
+                        record?.isApproved && (
+                            !record.isPaymentSent ?
+                                <Tag color='red'
+                                >
+                                    Payment Not Received
+                                </Tag>
+                                :
+                                record.isPaymentSent && !record.isPaymentReceived ?
+                                    <Tag color='purple' className='hover:cursor-pointer'
+                                        onClick={() => receiveRequestFromVendor(record.uuid)}
+                                    >
+                                        {loading ? 'Setting Payment as Received...' : 'Set Payment as Received'}</Tag>
+                                    :
+                                    <Tag color='green'>Payment Received</Tag>
+                        )
                     }
                 </Space>
             ),

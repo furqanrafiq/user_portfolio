@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import api from "../../axiosInterceptor";
@@ -13,23 +13,30 @@ import EventBudget from "../screens/Dashboard/EventCreation/EventBudget";
 import EventLocation from '../screens/Dashboard/EventCreation/EventLocation'
 import EventDate from "../screens/Dashboard/EventCreation/EventDate";
 import Layout from "./Layout";
+import AdminDashboard from "../screens/Dashboard copy";
 
 const ProtectedRoutes = () => {
 
-    const dispatch = useDispatch()
-    // console.log(eventData)
+    const user = useSelector((state) => state?.user?.user)
 
     return (
-        <Routes>
-            <Route element={<PrivateRouteHelper />}>
-                <Route path="/dashboard/*" element={<Dashboard />} />
-                <Route
-                    path="/dashboard/event/create/*"
-                    element={<Layout />}
-                />
-                <Route path="/dashboard/event/:eventId" element={<EventDetailPage />} />
-            </Route>
-        </Routes >
+        <>
+            {
+                user?._id ?
+                    <Routes>
+                        < Route element={< PrivateRouteHelper />}>
+                            <Route path="/dashboard/*" element={<Dashboard />} />
+                            <Route
+                                path="/dashboard/event/create/*"
+                                element={<Layout />}
+                            />
+                            <Route path="/dashboard/event/:eventId" element={<EventDetailPage />} />
+                        </Route >
+                    </Routes >
+                    :
+                    <Navigate to="/login" replace />
+            }
+        </>
     );
 };
 

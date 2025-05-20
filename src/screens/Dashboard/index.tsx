@@ -9,7 +9,11 @@ import GuestList from './Guestlist';
 import { useSelector } from 'react-redux';
 import VendorManager from './VendorManager';
 import Bookings from './Bookings';
-
+import PaymentDetails from './PaymentDetails';
+import AllVendors from '../Dashboard copy/VendorManager/SuggestedVendors';
+import UserManager from '../Dashboard copy/UserManager';
+import Reviews from '../Dashboard copy/Reviews';
+import AdminDashboard from '../Dashboard copy/Home';
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -25,7 +29,7 @@ const Dashboard = () => {
             { key: 'home', label: 'Home' },
             { key: 'checklist', label: 'Checklist' },
             { key: 'guests', label: 'Guests' },
-            { key: 'vendor-manager', label: 'Vendor Manager' },
+            { key: 'vendor-manager/suggested-vendors', label: 'Vendor Manager' },
         ];
 
         if (user?.isVendor) {
@@ -37,6 +41,16 @@ const Dashboard = () => {
                 key: 'bookings',
                 label: 'Bookings'
             });
+            baseItems.push({
+                key: 'payment-details',
+                label: 'Payment details'
+            });
+        }
+
+        if (user?.isAdmin) {
+            baseItems.push({ key: 'user-manager', label: 'Users' });
+            baseItems.push({ key: 'all-vendors', label: 'Vendors' });
+            baseItems.push({ key: 'reviews', label: 'Reviews' });
         }
 
         return baseItems;
@@ -48,13 +62,17 @@ const Dashboard = () => {
                 <Tabs type='card' defaultActiveKey="1" items={items} onChange={onChange} activeKey={location.pathname.split('/').pop()} // Set active tab based on URL
                 />
                 <Routes>
-                    <Route path="home" element={<Home />} />
+                    <Route path="home" element={user?.isAdmin ? <AdminDashboard /> : <Home />} />
                     <Route path="checklist" element={<Checklist />} />
+                    <Route path="payment-details" element={<PaymentDetails />} />
                     <Route path="guests" element={<GuestList />} />
                     <Route path="vendor-manager/*" element={<VendorManager location={location} />} />
                     <Route path="saved" element={<Dashboard />} />
                     <Route path="services" element={<Services />} />
                     <Route path="bookings" element={<Bookings />} />
+                    <Route path="all-vendors" element={<AllVendors />} />
+                    <Route path="user-manager" element={<UserManager />} />
+                    <Route path="reviews" element={<Reviews />} />
                 </Routes >
             </div>
         </div>

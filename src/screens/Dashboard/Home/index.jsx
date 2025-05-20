@@ -1,5 +1,5 @@
 import { ArrowRightOutlined, CalendarFilled, CalendarOutlined, ClockCircleFilled, ClockCircleOutlined, EditOutlined, GroupOutlined, PinterestFilled, PlusOutlined, RightOutlined, SendOutlined, TeamOutlined, WalletFilled } from '@ant-design/icons'
-import { Button, Col, Row, Table, Tooltip } from 'antd'
+import { Button, Col, Empty, Row, Table, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import EventDetailsModal from './EventDetailsModal'
@@ -7,6 +7,7 @@ import api from '../../../../axiosInterceptor'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 import TransactionModal from './TransactionModal'
+import GeneralCard from '../../../components/auth/GeneralCard'
 
 const Home = () => {
 
@@ -20,6 +21,7 @@ const Home = () => {
     const [userTransactions, setUserTransactions] = useState([])
     const [selectedEvent, setSelectedEvent] = useState({})
     const [selectedTransaction, setSelectedTransaction] = useState({})
+    const [topRatedServices, setTopRatedServices] = useState([])
 
     function getUserEvents() {
         return api.get(`/events/get-user-events?userId=${user?.uuid}`)
@@ -36,10 +38,16 @@ const Home = () => {
             .then((res) => setUserTransactions(res.data))
     }
 
+    function getTopRatedServices() {
+        return api.get(`/services/top-rated-services?userId=${user?.uuid}`)
+            .then((res) => setTopRatedServices(res.data))
+    }
+
     useEffect(() => {
         getUserChecklist()
         getUserEvents()
         getUserTransactions()
+        getTopRatedServices()
     }, [])
 
 
@@ -89,7 +97,7 @@ const Home = () => {
                 {
                     events.map((item) => {
                         return (
-                            <Col key={item} className='bg-white p-5 rounded-xl' md={4}>
+                            <Col key={item} className='bg-white p-5 rounded-xl' md={5}>
                                 <div className='flex justify-between items-center'>
                                     <p className='font-sans text-[18px]'>{item?.eventType}</p>
                                     <RightOutlined className='bg-primary rounded p-3 hover:cursor-pointer' onClick={() => navigate(`/dashboard/event/${item.uuid}`)} />
@@ -98,7 +106,7 @@ const Home = () => {
                                     <div className='flex'>
                                         <CalendarFilled className='bg-primary p-3 rounded-xl' />
                                         <div className='ml-5'>
-                                            <p className='text-[12px] font-medium'>Date</p>
+                                            <p className='text-[12px] font-medium'>Date & Time</p>
                                             <p className='font-medium text-gray-800'>{item.eventDate}</p>
                                         </div>
                                     </div>
@@ -106,7 +114,7 @@ const Home = () => {
                                         <EditOutlined onClick={() => { setIsModalOpen(true); setSelectedEvent(item) }} className='hover:cursor-pointer p-3 rounded-xl' />
                                     </div>
                                 </div>
-                                <div className='flex mt-3 justify-between'>
+                                {/* <div className='flex mt-3 justify-between'>
                                     <div className='flex'>
                                         <ClockCircleFilled className='bg-primary p-3 rounded-xl' />
                                         <div className='ml-5'>
@@ -117,7 +125,7 @@ const Home = () => {
                                     <div>
                                         <EditOutlined onClick={() => { setIsModalOpen(true); setSelectedEvent(item) }} className='hover:cursor-pointer p-3 rounded-xl' />
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className='flex mt-3 justify-between'>
                                     <div className='flex'>
                                         <SendOutlined className='bg-primary p-3 rounded-xl' />
@@ -135,7 +143,7 @@ const Home = () => {
                                         <WalletFilled className='bg-primary p-3 rounded-xl' />
                                         <div className='ml-5'>
                                             <p className='text-[12px] font-medium'>Budget</p>
-                                            <p className='font-medium text-gray-800'>${item.eventBudget}</p>
+                                            <p className='font-medium text-gray-800'>PKR {item.eventBudget}</p>
                                         </div>
                                     </div>
                                     <div>
@@ -189,10 +197,10 @@ const Home = () => {
                                                     <p>{item.eventType}</p>
                                                 </div>
                                                 <div>
-                                                    <p>$ {item.eventBudget}</p>
+                                                    <p>PKR {item.eventBudget}</p>
                                                 </div>
                                             </div>
-                                            <Tooltip title={`$${item.totalSpent}`}>
+                                            <Tooltip title={`PKR ${item.totalSpent}`}>
                                                 <div className='flex'>
                                                     <div style={{ background: `${item.totalSpent < item.eventBudget ? 'black' : '#ff5050'}`, width: `${item.amountSpent < item.eventBudget ? item.amountSpent : 100}%`, height: '5px', borderRadius: '10px', marginTop: '5px' }}></div>
                                                     <div style={{ background: 'lightgrey', width: `${item.totalSpent < item.eventBudget ? 100 - item.amountSpent : 0}%`, height: '5px', borderRadius: '10px', marginTop: '5px' }}></div>
@@ -217,7 +225,7 @@ const Home = () => {
                                                     <p className='text-[12px]'>Spent on {item?.eventDetails?.eventType} · {moment(item?.transactionDate).format('Do MMMM, YYYY')}</p>
                                                 </div>
                                                 <div className='text-end'>
-                                                    <p className=''>${item?.amount}</p>
+                                                    <p className=''>PKR {item?.amount}</p>
                                                     <p className='text-[12px]'>{item?.paymentType}</p>
                                                 </div>
                                             </div>
@@ -230,7 +238,26 @@ const Home = () => {
                     </Col>
                 </Row>
             </div>
-            <EventDetailsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} />
+            <div className='mt-5 bg-white rounded-xl p-5'>
+                <p className='font-sans text-[20px]'>Top Vendors</p>
+                {
+                    <Row gutter={[24, 24]} className='justify-center mt-5'>
+                        {
+                            topRatedServices?.length > 0 ?
+                                topRatedServices?.map(item => {
+                                    return (
+                                        <Col span={6} key={item}>
+                                            <GeneralCard data={item} addVendor={true} />
+                                        </Col>
+                                    )
+                                })
+                                :
+                                <Empty />
+                        }
+                    </Row>
+                }
+            </div>
+            <EventDetailsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent} getUserEvents={getUserEvents} />
             <TransactionModal isModalOpen={transactionModal} setIsModalOpen={setTransactionModal} userEvents={events} selectedTransaction={selectedTransaction} setSelectedTransaction={setSelectedTransaction} getUserTransactions={getUserTransactions} getUserEvents={getUserEvents} />
         </div>
     )

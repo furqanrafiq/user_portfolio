@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import weddingVenue from '../../assets/wedding-venue.jpeg'
 import { NavLink } from 'react-router-dom'
-import { HeartOutlined, PlusOutlined } from '@ant-design/icons'
+import { HeartOutlined, PlusOutlined, StarFilled } from '@ant-design/icons'
 import { Button } from 'antd'
 import api from '../../../axiosInterceptor'
-import { apiURL } from '../../../helper'
+import { apiURL, imageURL } from '../../../helper'
 import { useSelector } from 'react-redux'
 import { useNotify } from '../../utils/NotificationProvider'
 
@@ -40,17 +40,17 @@ const GeneralCard = ({ data, addVendor }) => {
         <div className='general-card'>
             <div className='relative'>
                 <NavLink to={`/service-details/${data?.uuid}`}>
-                    <img className='general-image overla' src={weddingVenue} />
+                    <img className='general-image overlay w-full min-h-[250px]' src={data?.serviceImages?.length > 0 ? imageURL + data?.serviceImages[0]?.imagePath : weddingVenue} />
                 </NavLink>
             </div>
             <div className='text-left p-5'>
                 <div className='flex justify-between'>
                     <p className='general-heading font-medium mb-3'>{data?.serviceName}</p>
-                    <p className='general-heading font-medium mb-3'>${data?.price}</p>
+                    <p className='general-heading font-medium mb-3'><StarFilled /> {data?.averageRating ? data?.averageRating?.toFixed(1) : 0}</p>
                 </div>
                 <div className='flex justify-between'>
                     <div>
-                        <p className='font-bold'>Pousada Palácio Estoi</p>
+                        <p className='font-bold'>{data?.name}</p>
                         <p className='text-[12px] font-medium'>Faro District, Portugal</p>
                     </div>
                     {

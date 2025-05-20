@@ -4,6 +4,8 @@ import { apiURL } from '../../../../helper';
 import { useSelector } from 'react-redux';
 import { useNotify } from '../../../utils/NotificationProvider';
 import api from '../../../../axiosInterceptor';
+import { Navigate, NavLink } from 'react-router-dom';
+import VendorPaymentDetailsModal from './VendorPaymentDetailsModal';
 
 const SavedVendors = ({ key }) => {
 
@@ -11,6 +13,10 @@ const SavedVendors = ({ key }) => {
   const notify = useNotify()
   const [data, setData] = useState([])
   const [events, setEvents] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [vendorId, setVendorId] = useState(null)
+  const [bookingId, setBookingId] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   function setEventForBooking(eventId, bookingId) {
     const body = {
@@ -29,6 +35,7 @@ const SavedVendors = ({ key }) => {
   }
 
   function sendRequestToVendor(bookingId) {
+    setLoading(true)
     const body = {
       bookingId
     }
@@ -39,6 +46,7 @@ const SavedVendors = ({ key }) => {
           description: res.data.msg,
           placement: 'topRight',
         })
+        setLoading(false)
         getSavedVendors()
       })
       .catch((err) => {
@@ -47,6 +55,7 @@ const SavedVendors = ({ key }) => {
           description: err.response.data.msg,
           placement: 'topRight',
         })
+        setLoading(false)
       })
   }
 
@@ -91,28 +100,33 @@ const SavedVendors = ({ key }) => {
         <Space size="middle">
           {
             !record.isRequestSent && !record.isApproved && !record.isRejected ?
-              <Tag color='blue' className='hover:cursor-pointer' onClick={() => sendRequestToVendor(record.uuid)}>Send Request</Tag>
+              <Tag color='blue' className='hover:cursor-pointer' onClick={() => sendRequestToVendor(record.uuid)}>{loading ? 'Sending...' : 'Send Request'}</Tag>
               :
               record.isRequestSent && !record.isApproved && !record.isRejected ?
-                <Tag color='blue' className='hover:cursor-pointer' onClick={() => sendRequestToVendor(record.uuid)}>Pending</Tag>
+                <Tag color='blue' className='hover:cursor-pointer'>Pending</Tag>
                 :
                 record.isRequestSent && record.isApproved && !record.isRejected ?
-                  <Tag color='green' className='hover:cursor-pointer' onClick={() => sendRequestToVendor(record.uuid)}>Approved</Tag>
+                  <Tag color='green' className='hover:cursor-pointer'>Approved</Tag>
                   :
-                  <Tag color='red' className='hover:cursor-pointer' onClick={() => sendRequestToVendor(record.uuid)}>Rejected</Tag>
+                  <Tag color='red' className='hover:cursor-pointer'>Rejected</Tag>
           }
-          <Tag color='purple' className='hover:cursor-pointer'>View Service</Tag>
+
+          {
+            record?.isApproved && (
+              !record.isPaymentSent ?
+                <Tag color='blue' className='hover:cursor-pointer' onClick={() => { setIsModalOpen(true); setVendorId(record.serviceProviderId); setBookingId(record.uuid) }}>Send Payment</Tag>
+                :
+                record.isPaymentSent && !record.isPaymentReceived ?
+                  <Tag color='purple'>Payment Sent</Tag>
+                  :
+                  <Tag color='green' className='hover:cursor-pointer'>Payment Done</Tag>
+            )
+          }
+          <NavLink to={`/service-details/${record.uuid}`}>
+            <Tag color='purple' className='hover:cursor-pointer'>View Service</Tag>
+          </NavLink>
         </Space>
-      ),
-      //   render: (_, record) => (
-      //     !record?.IsApproved && !record?.IsRejected ?
-      //         <Tag color='purple' className='hover:cursor-pointer'>Pending</Tag>
-      //         :
-      //         record?.IsApproved ?
-      //             <Tag color='green' className='hover:cursor-pointer'>Accepted</Tag>
-      //             :
-      //             <Tag color='red' className='hover:cursor-pointer'>Rejected</Tag>
-      // )
+      )
     },
   ];
 
@@ -135,6 +149,7 @@ const SavedVendors = ({ key }) => {
   return (
     <div>
       <Table columns={columns} dataSource={data} />
+      <VendorPaymentDetailsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} vendorId={vendorId} setVendorId={setVendorId} bookingId={bookingId} setBookingId={setBookingId} getSavedVendors={getSavedVendors} />
     </div>
   )
 }

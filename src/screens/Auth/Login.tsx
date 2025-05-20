@@ -8,7 +8,7 @@ import {
     MailOutlined,
     LockOutlined
 } from '@ant-design/icons';
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { openNotification } from "../../utils/notifications";
 import { useNotify } from "../../utils/NotificationProvider";
 import { storeUserReducer } from "./redux/authSlice";
@@ -37,9 +37,10 @@ export default function Login() {
                     placement: 'topRight',
                 });
                 setLoading(false)
-                localStorage.setItem('easyShadiUser', res.data.user.token)
-                dispatch(storeUserReducer(res.data.user.user))
-                navigate('/dashboard/home')
+                navigate(`/verify-otp/${values.email}`)
+                // localStorage.setItem('easyShadiUser', res.data.user.token)
+                // dispatch(storeUserReducer(res.data.user.user))
+                // navigate('/dashboard/home')
 
             })
             .catch((error) => {
@@ -190,12 +191,12 @@ export default function Login() {
                 </Form>
                 <div className="text-center space-y-4">
                     <Text className="text-gray-500">
-                        <a href="#" className="font-sans">Forgot your password?</a>
+                        <NavLink to='/forget-password' className="font-sans">Forgot your password?</NavLink>
                     </Text>
                     <div>
                         <Text className="text-gray-500">
                             Don't have an account?{' '}
-                            <a href="#" className="font-sans">Sign up</a>
+                            <NavLink to={'/signup'} className="font-sans">Sign up</NavLink>
                         </Text>
                     </div>
                 </div>

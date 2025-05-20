@@ -5,6 +5,7 @@ import { useNotify } from '../../../utils/NotificationProvider';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import api from '../../../../axiosInterceptor';
+import dayjs from 'dayjs';
 
 function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist, selectedChecklist }) {
     const [loading, setLoading] = useState(false)
@@ -19,7 +20,7 @@ function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist, selecte
             form.setFieldsValue({
                 description: selectedChecklist?.description,
                 category: selectedChecklist?.category,
-                dueDate: moment(selectedChecklist.dueDate),
+                dueDate: dayjs(selectedChecklist.dueDate),
                 event: selectedChecklist.eventDetails?.eventType,
             });
         }

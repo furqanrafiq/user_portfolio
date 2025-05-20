@@ -167,8 +167,8 @@ export default function SignUp() {
                 <div className="text-center space-y-4">
                     <div>
                         <p className="text-gray-500">
-                            Don't have an account?{' '}
-                            <NavLink to={'/login'} className="font-sans text-blue-500">Sign up</NavLink>
+                            Already have an account?{' '}
+                            <NavLink to={'/login'} className="font-sans text-blue-500">Login</NavLink>
                         </p>
                     </div>
                 </div>

@@ -12,7 +12,6 @@ function GuestModal({ isModalOpen, setIsModalOpen, getUserGuests, selectedGuest 
     const user = useSelector((state) => state?.user?.user)
     const [userEvents, setUserEvents] = useState([])
     const [form] = Form.useForm()
-    console.log(selectedGuest?.uuid)
 
     useEffect(() => {
         if (selectedGuest) {

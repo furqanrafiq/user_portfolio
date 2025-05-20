@@ -55,9 +55,15 @@ const Services = () => {
 
     const columns: TableProps<DataType>['columns'] = [
         {
-            title: 'Name',
+            title: 'Service',
             dataIndex: 'serviceName',
             key: 'serviceName',
+            render: (text) => <a>{text}</a>,
+        },
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
             render: (text) => <a>{text}</a>,
         },
         {
@@ -97,7 +103,7 @@ const Services = () => {
                 </Button>
             </div>
             <Table<DataType> columns={columns} dataSource={userServices} />
-            <AddServiceModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} getUserServices={getUserServices} editService={editService} />
+            <AddServiceModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} getUserServices={getUserServices} editService={editService} setEditService={setEditService} />
         </div>
     )
 }

@@ -1,6 +1,8 @@
 // eslint-disable-next-line no-undef
 export const apiURL = import.meta.env.VITE_API_URL;
+export const imageURL = import.meta.env.VITE_IMAGE_URL;
 export const mapApiKey = import.meta.env.VITE_MAP_API_KEY;
+
 
 export const eventTypes = [
     {

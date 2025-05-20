@@ -7,7 +7,7 @@ const GuestList = () => {
             <div className="bg-secondary">
                 <div className="py-5 text-center max-w-7xl mx-auto">
                     <p className="font-serif text-heading">Free Wedding Guest List Maker: Online Wedding Guest Planner & Tracker</p>
-                    <p className="font-sans">Planning your wedding just got easier! With Loverly’s free wedding guest list maker and online wedding guest tracker, you will have everything you need to stay organized and stress free. Whether you’re figuring out how to get guests addresses for wedding invitations or managing RSVPs, our guest list manager tool simplifies every step of the process.
+                    <p className="font-sans">Planning your wedding just got easier! With Easyshadi’s free wedding guest list maker and online wedding guest tracker, you will have everything you need to stay organized and stress free. Whether you’re figuring out how to get guests addresses for wedding invitations or managing RSVPs, our guest list manager tool simplifies every step of the process.
                     </p>
                 </div>
             </div>
@@ -88,11 +88,11 @@ const GuestList = () => {
                     </Row>
                 </div>
                 <div className="py-10">
-                    <p className="font-serif text-heading text-center">Create Your Wedding Guest List Online FREE with Loverly</p>
+                    <p className="font-serif text-heading text-center">Create Your Wedding Guest List Online FREE with Easyshadi</p>
                     <p className="font-sans">Wondering how to make a wedding guest list? Our online wedding guest list creator is the ultimate tool to get organized quickly. Follow these simple wedding tips to get started:</p>
                     <div className="mt-5">
-                        <p className="font-bold">1. Sign up for Loverly</p>
-                        <p className="font-sans">Create a free account on Loverly and gain access to all our wedding planning tools, including the free guest list manager. You can also invite your partner to help build the guest list.
+                        <p className="font-bold">1. Sign up for Easyshadi</p>
+                        <p className="font-sans">Create a free account on Easyshadi and gain access to all our wedding planning tools, including the free guest list manager. You can also invite your partner to help build the guest list.
                         </p>
                     </div>
                     <div className="mt-5">
@@ -115,7 +115,7 @@ const GuestList = () => {
                     </div>
                     <p className="font-sans mt-5">That’s it! You’re ready to take the stress out of guest management and focus on what matters most: celebrating your wedding day.
                     </p>
-                    <p className="mt-5 font-sans text-center">With Loverly, you will learn how to plan your wedding, giving you the confidence to create the celebration of your dreams. Additionally, our integrated tools ensure you don’t miss a single step in the planning process for your big day. From managing your budget to exploring creative ideas for your ceremony and reception, Loverly offers everything you need in one convenient platform. Our goal is to simplify your planning journey and help you stay focused on making your wedding day unforgettable.
+                    <p className="mt-5 font-sans text-center">With Easyshadi, you will learn how to plan your wedding, giving you the confidence to create the celebration of your dreams. Additionally, our integrated tools ensure you don’t miss a single step in the planning process for your big day. From managing your budget to exploring creative ideas for your ceremony and reception, Easyshadi offers everything you need in one convenient platform. Our goal is to simplify your planning journey and help you stay focused on making your wedding day unforgettable.
                     </p>
                 </div>
             </div>

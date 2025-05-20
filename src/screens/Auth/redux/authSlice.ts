@@ -13,7 +13,6 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         storeUserReducer: (state, action: PayloadAction<Object>) => {
-            console.log(state)
             state.user = action.payload;
         },
     },

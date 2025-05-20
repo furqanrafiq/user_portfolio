@@ -17,7 +17,7 @@ const Footer = () => {
                     <Col xs={24} sm={12} md={6}>
                         <div className="flex items-center mb-6">
                             <HeartFilled className="text-2xl text-pink-500" />
-                            <span className="ml-2 text-2xl font-serif text-white">Loverly</span>
+                            <span className="ml-2 text-2xl font-serif text-white">Easyshadi</span>
                         </div>
                         <Paragraph className="text-gray-400">
                             Your go-to source for wedding planning inspiration, tools, and vendor connections.
@@ -65,7 +65,7 @@ const Footer = () => {
 
                 <div className="text-center">
                     <Text className="text-gray-400">
-                        © {new Date().getFullYear()} Loverly. All rights reserved.
+                        © {new Date().getFullYear()} Easyshadi. All rights reserved.
                     </Text>
                 </div>
             </div>

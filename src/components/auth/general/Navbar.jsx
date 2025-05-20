@@ -1,12 +1,37 @@
 import { Layout, Menu, Dropdown, Button } from 'antd';
 import { HeartFilled, MenuOutlined, DownOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { apiURL } from '../../../../helper';
+import { useDispatch, useSelector } from 'react-redux';
+import { storeUserReducer } from '../../../screens/Auth/redux/authSlice';
+import { storeServices } from '../../../redux/serviceSlice';
 
 const { Header, } = Layout;
 
 export default function Navbar() {
     const navigate = useNavigate()
-    // const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const dispatch = useDispatch()
+    const [services, setAllServices] = useState([])
+
+
+    function getAllServices() {
+        return axios.get(`${apiURL}/services/get-all`).then((res) => {
+            let servicesArray = res.data.map((item) => ({
+                name: item.name,
+                link: `/services/${item.name}`,
+            })
+            )
+            setAllServices(servicesArray)
+            dispatch(storeServices(res.data))
+        })
+    }
+
+    useEffect(() => {
+        getAllServices()
+    }, [])
+
 
     const menuItems = [
         {
@@ -37,68 +62,69 @@ export default function Navbar() {
             title: "Find Wedding Professionals",
             link: "#",
             icon: "👥",
-            subMenu: [
-                {
-                    name: "Wedding Venue",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Photography",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Florist",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Wedding Planner",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Videography",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Caterer",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Entertainment",
-                    link: "/wedding-venue",
-                }
-            ]
+            // subMenu: [
+            //     {
+            //         name: "Wedding Venue",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Photography",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Florist",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Wedding Planner",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Videography",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Caterer",
+            //         link: "/services",
+            //     },
+            //     {
+            //         name: "Entertainment",
+            //         link: "/services",
+            //     }
+            // ]
+            subMenu: services
         },
-        {
-            title: "Popular Wedding Destinations",
-            link: "#",
-            icon: "📋",
-            subMenu: [
-                {
-                    name: "Athens, Greece",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Cabo San Lucas, Mexico",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Los Angeles, California",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "New York, New York",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Chicago, Illinois",
-                    link: "/wedding-venue",
-                },
-                {
-                    name: "Melbourne, Australia",
-                    link: "/wedding-venue",
-                }
-            ]
-        }
+        // {
+        //     title: "Popular Wedding Destinations",
+        //     link: "#",
+        //     icon: "📋",
+        //     subMenu: [
+        //         {
+        //             name: "Athens, Greece",
+        //             link: "/services",
+        //         },
+        //         {
+        //             name: "Cabo San Lucas, Mexico",
+        //             link: "/services",
+        //         },
+        //         {
+        //             name: "Los Angeles, California",
+        //             link: "/services",
+        //         },
+        //         {
+        //             name: "New York, New York",
+        //             link: "/services",
+        //         },
+        //         {
+        //             name: "Chicago, Illinois",
+        //             link: "/services",
+        //         },
+        //         {
+        //             name: "Melbourne, Australia",
+        //             link: "/services",
+        //         }
+        //     ]
+        // }
     ];
 
     const userMenuItems = [
@@ -125,7 +151,7 @@ export default function Navbar() {
     );
 
     const vendorMenu = (
-        <Menu className="bg-white shadow-lg rounded-lg w-[800px] grid grid-cols-2 gap-6">
+        <Menu className="bg-white shadow-lg rounded-lg gap-6">
             {vendorMenuItems.map((item) => (
                 <div key={item} className='p-5'>
                     <p className='font-serif text-[24px]'>{item.title}</p>
@@ -155,6 +181,24 @@ export default function Navbar() {
         </Menu>
     );
 
+
+
+    function handleLogout() {
+        localStorage.removeItem('easyShadiUser');
+        dispatch(storeUserReducer({}))
+        window.location.href = "/login";
+    }
+
+    const logoutMenu = (
+        <Menu className="bg-white shadow-lg rounded-lg grid grid-cols-1">
+            <div className='p-3 hover:bg-gray-100 font-sans hover:cursor-pointer' onClick={() => handleLogout()}>
+                <p>Logout</p>
+            </div>
+        </Menu>
+    );
+
+    const user = useSelector((state) => state?.user?.user)
+
     return (
         <Header className="bg-secondary px-0">
             <div className="mx-auto container px-4 sm:px-6 lg:px-8">
@@ -183,15 +227,30 @@ export default function Navbar() {
 
                     <div className="flex items-center space-x-4">
                         {/* <UserOutlined className="text-lg" /> */}
-                        <Dropdown overlay={userMenu} trigger={["hover"]} placement="bottomCenter">
-                            <Button
-                                type="primary"
-                                className="border-none text-base font-medium p-5"
-                                size="small"
-                            >
-                                Get Started
-                            </Button>
-                        </Dropdown>
+                        {
+                            user?._id ?
+                                <NavLink to={'/dashboard/home'}>
+                                    <Dropdown overlay={logoutMenu} trigger={["hover"]} placement="bottomCenter">
+                                        <Button
+                                            type="primary"
+                                            className="border-none text-base font-medium p-5"
+                                            size="small"
+                                        >
+                                            Dashboard
+                                        </Button>
+                                    </Dropdown>
+                                </NavLink>
+                                :
+                                <Dropdown overlay={userMenu} trigger={["hover"]} placement="bottomCenter">
+                                    <Button
+                                        type="primary"
+                                        className="border-none text-base font-medium p-5"
+                                        size="small"
+                                    >
+                                        Get Started
+                                    </Button>
+                                </Dropdown>
+                        }
                     </div>
                 </div>
             </div>

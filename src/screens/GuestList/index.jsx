@@ -1,7 +1,11 @@
 import { Button, Col, Row } from "antd"
 import freeWeddingList from '../../assets/free-wedding-list.png'
+import { useSelector } from "react-redux"
+import { NavLink } from "react-router-dom"
 
 const GuestList = () => {
+    const user = useSelector((state) => state?.user?.user)
+
     return (
         <div>
             <div className="bg-secondary">
@@ -18,13 +22,15 @@ const GuestList = () => {
                             <p className="font-serif text-heading mb-3">Free Wedding Guest List Maker</p>
                             <p className="font-sans text-[16px] mb-10">The best wedding guest list organizer to collect, manage and organize your wedding guest information.
                             </p>
-                            <Button
-                                type="primary"
-                                className="border-none h-12 text-base font-medium w-[200px]"
-                                size="small"
-                            >
-                                Get Started
-                            </Button>
+
+                            <NavLink to={user?.uuid ? '/dashboard/guests' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    Get Started
+                                </Button>
+                            </NavLink>
                         </Col>
                         <Col span={12}>
                             <img src={freeWeddingList} />
@@ -40,13 +46,15 @@ const GuestList = () => {
                             <p className="font-serif text-[18px] mb-3">Build Your Guest List</p>
                             <p className="font-sans mb-10">Forget spreadsheets and manual entry! With our free wedding guest list maker, you can automatically capture guest details by sending out a customizable link to collect mailing addresses, email addresses, phone numbers, and even information about plus ones. You can also choose exactly what details to collect, tailoring it to your wedding needs. Already have some of your guests’ information? You can start by easily uploading your existing list to save time and effort. Building your guest list has never been more intuitive. Our platform ensures every detail is accounted for, so you’re set up for success when sending out your invitations.
                             </p>
-                            <Button
-                                type="primary"
-                                className="font-sans border-none h-12 w-[200px]"
-                                size="small"
-                            >
-                                MANAGE MY GUEST LIST
-                            </Button>
+
+                            <NavLink to={user?.uuid ? '/dashboard/guests' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    MANAGE MY GUEST LIST
+                                </Button>
+                            </NavLink>
                         </Col>
                         <Col span={12}>
                             <img src={freeWeddingList} />
@@ -60,13 +68,14 @@ const GuestList = () => {
                             <p className="font-serif text-[18px] mb-3">Manage Event RSVPs</p>
                             <p className="font-sans text-[16px] mb-10">Tracking RSVPs can be a logistical headache, but not anymore. With our online wedding guest tracker, you can track your guest count across multiple events, whether it’s your rehearsal dinner, wedding ceremony, or reception, all in one place. Customize your RSVP page to create a tailored experience that fits your wedding’s unique vibe. If guests haven’t responded, you can easily send out email reminders to nudge them. Additionally, our tracker lets you capture important preferences like meal choices, dietary restrictions, and accommodations to ensure your guests have the best experience possible. Our wedding guest list tracker helps you stay in control, so no detail gets overlooked.
                             </p>
-                            <Button
-                                type="primary"
-                                className="font-sans border-none h-12 w-[200px]"
-                                size="small"
-                            >
-                                MANAGE MY GUEST LIST
-                            </Button>
+                            <NavLink to={user?.uuid ? '/dashboard/guests' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    MANAGE MY GUEST LIST
+                                </Button>
+                            </NavLink>
                         </Col>
                     </Row>
                     <Row className="flex items-center my-5" gutter={24}>
@@ -74,13 +83,15 @@ const GuestList = () => {
                             <p className="font-serif text-[18px] mb-3">Download & Export Contacts</p>
                             <p className="font-sans text-[16px] mb-10">Once your list is complete, it’s time to take the next steps in your planning journey. With our tool, you can easily download your guest list, which is perfect for ordering wedding invitations or sharing with your family members. You can also export RSVP details to share essential information with your wedding planner, caterer, or other vendors, keeping everyone on the same page. This seamless process makes sure you’re always one step ahead in your wedding planning.
                             </p>
-                            <Button
-                                type="primary"
-                                className="font-sans border-none h-12 w-[200px]"
-                                size="small"
-                            >
-                                MANAGE MY GUEST LIST
-                            </Button>
+
+                            <NavLink to={user?.uuid ? '/dashboard/guests' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    MANAGE MY GUEST LIST
+                                </Button>
+                            </NavLink>
                         </Col>
                         <Col span={12}>
                             <img src={freeWeddingList} />

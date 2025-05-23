@@ -1,7 +1,11 @@
 import { Button, Col, Row } from "antd"
 import personlizedCheckList from '../../assets/personalized-checklist.png'
+import { NavLink } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 const CheckList = () => {
+    const user = useSelector((state) => state?.user?.user)
+
     return (
         <div>
             <div className="bg-secondary">
@@ -18,13 +22,14 @@ const CheckList = () => {
                             <p className="font-serif text-heading mb-3">Personalized Wedding Checklist</p>
                             <p className="font-sans text-[16px] mb-10">Stay organized with our wedding checklists free of charge! From big milestones to tiny details, every to do is covered.
                             </p>
-                            <Button
-                                type="primary"
-                                className="border-none h-12 text-base font-medium w-[200px]"
-                                size="small"
-                            >
-                                Get Started
-                            </Button>
+                            <NavLink to={user?.uuid ? '/dashboard/checklist' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    Get Started
+                                </Button>
+                            </NavLink>
                         </Col>
                         <Col span={12}>
                             <img src={personlizedCheckList} />
@@ -37,13 +42,14 @@ const CheckList = () => {
                             <p className="font-serif text-[18px] mb-3">Your Tailored Wedding Timeline</p>
                             <p className="font-sans mb-10">Get a personalized wedding checklist designed around your unique timeline! By answering a few simple questions, including your wedding date, we’ll create a step-by-step plan just for you. Stay on track and tackle each task at the perfect time, ensuring a seamless and stress-free wedding day planning experience.
                             </p>
-                            <Button
-                                type="primary"
-                                className="font-sans border-none h-12 w-[200px]"
-                                size="small"
-                            >
-                                SEE MY COUNTDOWN
-                            </Button>
+                            <NavLink to={user?.uuid ? '/dashboard/checklist' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    CUSTOMIZE MY CHECKLIST
+                                </Button>
+                            </NavLink>
                         </Col>
                         <Col span={12}>
                             <img src={personlizedCheckList} />
@@ -57,13 +63,15 @@ const CheckList = () => {
                             <p className="font-serif text-[18px] mb-3">Customized Just For You</p>
                             <p className="font-sans text-[16px] mb-10">Whether you’re dreaming of an intimate gathering or a grand celebration, our dynamic checklists adapt to your vision. Packed with all the important tasks and wedding details, we ensure nothing is overlooked.
                             </p>
-                            <Button
-                                type="primary"
-                                className="font-sans border-none h-12 w-[200px]"
-                                size="small"
-                            >
-                                CUSTOMIZE MY CHECK LIST
-                            </Button>
+
+                            <NavLink to={user?.uuid ? '/dashboard/checklist' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    CUSTOMIZE MY CHECKLIST
+                                </Button>
+                            </NavLink>
                         </Col>
                     </Row>
                     <Row className="flex items-center my-5" gutter={24}>
@@ -71,13 +79,15 @@ const CheckList = () => {
                             <p className="font-serif text-[18px] mb-3">Manage Your To Dos</p>
                             <p className="font-sans text-[16px] mb-10">Effortlessly stay on top of your wedding plans with our intuitive tool. Add custom notes, track progress, and share updates with your planning team. Plus, we’ll send helpful email reminders for upcoming deadlines, so you’re always a step ahead. Never miss a moment as you plan the day of your dreams!
                             </p>
-                            <Button
-                                type="primary"
-                                className="font-sans border-none h-12 w-[200px]"
-                                size="small"
-                            >
-                                SEE MY TO-DO`S
-                            </Button>
+
+                            <NavLink to={user?.uuid ? '/dashboard/checklist' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    CUSTOMIZE MY CHECKLIST
+                                </Button>
+                            </NavLink>
                         </Col>
                         <Col span={12}>
                             <img src={personlizedCheckList} />

@@ -18,6 +18,37 @@ body {
   background-color: #F4EDE9;
 }
 
+.hero-section {
+  height: 85vh;
+}
+
+.hero-section-image {
+  background: url("../src/assets/herosection1.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  filter: blur(1px);
+}
+
+
+.above-footer {
+  height: 55vh;
+}
+
+.above-footer-image {
+  background: url("../src/assets/above-footer.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  filter: blur(1px);
+}
+
 /* Ant Design Customizations */
 .ant-btn-primary {
   background-color: #000 !important;
@@ -99,46 +130,51 @@ body {
   background-color: black !important;
 }
 
-.event-type-radio .ant-radio-button-wrapper-checked:hover{
+.event-type-radio .ant-radio-button-wrapper-checked:hover {
   color: white;
 }
 
-:where(.css-dev-only-do-not-override-1yacf91).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before,:where(.css-dev-only-do-not-override-1yacf91).ant-radio-button-wrapper:not(.ant-radio-button-wrapper-disabled)::before {
+:where(.css-dev-only-do-not-override-1yacf91).ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before,
+:where(.css-dev-only-do-not-override-1yacf91).ant-radio-button-wrapper:not(.ant-radio-button-wrapper-disabled)::before {
   content: none;
 }
 
 .swiper-button-prev:after,
 .swiper-rtl .swiper-button-next:after {
-    content: '' !important;
+  content: '' !important;
 }
 
 .swiper-button-next:after,
 .swiper-rtl .swiper-button-prev:after {
-    content: '' !important;
+  content: '' !important;
 }
 
 .swiper-button-next svg,
 .swiper-button-prev svg {
-    width: 24px !important;
-    height: 24px !important;
+  width: 24px !important;
+  height: 24px !important;
 }
 
 .swiper-button-next,
 .swiper-button-prev {
-    position: relative !important;
+  position: relative !important;
 }
 
 .swiper-slide.swiper-slide-active {
-    --tw-border-opacity: 1 !important;
-    border-color: rgb(79 70 229 / var(--tw-border-opacity)) !important;
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(79 70 229 / var(--tw-border-opacity)) !important;
 }
 
 .swiper-slide.swiper-slide-active>.swiper-slide-active\:text-indigo-600 {
-    --tw-text-opacity: 1;
-    color: rgb(79 70 229 / var(--tw-text-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(79 70 229 / var(--tw-text-opacity));
 }
 
 .swiper-slide.swiper-slide-active>.flex .grid .swiper-slide-active\:text-indigo-600 {
-    --tw-text-opacity: 1;
-    color: rgb(79 70 229 / var(--tw-text-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(79 70 229 / var(--tw-text-opacity));
+}
+
+.react-multi-carousel-track {
+  gap: 1rem;
 }

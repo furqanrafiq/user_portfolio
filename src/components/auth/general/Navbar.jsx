@@ -186,7 +186,7 @@ export default function Navbar() {
     function handleLogout() {
         localStorage.removeItem('easyShadiUser');
         dispatch(storeUserReducer({}))
-        window.location.href = "/login";
+        navigate('/login')
     }
 
     const logoutMenu = (
@@ -220,7 +220,7 @@ export default function Navbar() {
 
                         <Dropdown overlay={vendorMenu} trigger={["hover"]} placement="bottomCenter">
                             <button className="font-semibold uppercase flex items-center">
-                                Venues & Vendors <DownOutlined className="ml-2" />
+                                Vendors <DownOutlined className="ml-2" />
                             </button>
                         </Dropdown>
                     </div>

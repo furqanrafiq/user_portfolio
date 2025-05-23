@@ -36,7 +36,7 @@ const DetailPage = () => {
             <div className='text-center'>
                 <p style={{ border: "1px solid darkgrey", width: "fit-content", borderRadius: "20px", padding: "10px", margin: "0px auto" }} className='font-sans'>{service?.serviceName}</p>
                 <p className='font-serif text-heading'>{service?.name}</p>
-                {/* <p className='font-sans text-[16px]'>Lisbon, Portugal</p> */}
+                <p className='font-sans text-[16px]'>{service?.location}</p>
             </div>
             <div className='mt-5 w-[50%] mx-auto'>
                 <ImageGallery images={service?.images} />
@@ -52,10 +52,10 @@ const DetailPage = () => {
                             <p className='font-serif text-[20px] mb-5'>About {service?.name}</p>
                             <p><PhoneOutlined /> {service?.phoneNumber}</p>
                             {/* <p><PhoneOutlined /> (+123) 456789</p> */}
-                            <Button type='primary' className="mt-5 w-full border-none h-12 text-base font-medium">
+                            {/* <Button type='primary' className="mt-5 w-full border-none h-12 text-base font-medium">
                                 <HeartFilled />
                                 Add Vendor
-                            </Button>
+                            </Button> */}
                             <Button type='primary' className="mt-5 w-full border-none h-12 text-base font-medium" onClick={() => setIsModalOpen(true)}>
                                 Add Review
                             </Button>

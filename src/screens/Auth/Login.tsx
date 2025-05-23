@@ -37,10 +37,13 @@ export default function Login() {
                     placement: 'topRight',
                 });
                 setLoading(false)
-                navigate(`/verify-otp/${values.email}`)
-                // localStorage.setItem('easyShadiUser', res.data.user.token)
-                // dispatch(storeUserReducer(res.data.user.user))
-                // navigate('/dashboard/home')
+                if (res.data.user) {
+                    navigate('/dashboard/home')
+                    localStorage.setItem('easyShadiUser', res.data.user.token)
+                    dispatch(storeUserReducer(res.data.user.user))
+                } else {
+                    navigate(`/verify-otp/${values.email}`)
+                }
 
             })
             .catch((error) => {

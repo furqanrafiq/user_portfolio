@@ -14,6 +14,10 @@ import AllVendors from '../Dashboard copy/VendorManager/SuggestedVendors';
 import UserManager from '../Dashboard copy/UserManager';
 import Reviews from '../Dashboard copy/Reviews';
 import AdminDashboard from '../Dashboard copy/Home';
+import Settings from './Settings';
+import UserServices from './UserServices';
+import AllBookings from './AllBookings';
+import Invoices from './Invoices';
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -30,12 +34,13 @@ const Dashboard = () => {
             { key: 'checklist', label: 'Checklist' },
             { key: 'guests', label: 'Guests' },
             { key: 'vendor-manager/suggested-vendors', label: 'Vendor Manager' },
+            { key: 'Invoices', label: 'Invoices' },
         ];
 
         if (user?.isVendor) {
             baseItems.push({
                 key: 'services',
-                label: 'Services'
+                label: 'My Services'
             });
             baseItems.push({
                 key: 'bookings',
@@ -51,7 +56,11 @@ const Dashboard = () => {
             baseItems.push({ key: 'user-manager', label: 'Users' });
             baseItems.push({ key: 'all-vendors', label: 'Vendors' });
             baseItems.push({ key: 'reviews', label: 'Reviews' });
+            baseItems.push({ key: 'user-services', label: 'User Services' });
+            baseItems.push({ key: 'all-bookings', label: 'All Bookings' });
         }
+
+        baseItems.push({ key: 'settings', label: 'Settings' });
 
         return baseItems;
     }, [user]);
@@ -73,6 +82,10 @@ const Dashboard = () => {
                     <Route path="all-vendors" element={<AllVendors />} />
                     <Route path="user-manager" element={<UserManager />} />
                     <Route path="reviews" element={<Reviews />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="user-services" element={<UserServices />} />
+                    <Route path="all-bookings" element={<AllBookings />} />
+                    <Route path="invoices" element={<Invoices />} />
                 </Routes >
             </div>
         </div>

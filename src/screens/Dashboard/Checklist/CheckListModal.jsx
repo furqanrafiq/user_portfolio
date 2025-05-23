@@ -21,7 +21,7 @@ function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist, selecte
                 description: selectedChecklist?.description,
                 category: selectedChecklist?.category,
                 dueDate: dayjs(selectedChecklist.dueDate),
-                event: selectedChecklist.eventDetails?.eventType,
+                event: selectedChecklist.eventDetails?.eventId,
             });
         }
     }, [selectedChecklist, form]);

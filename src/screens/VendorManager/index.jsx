@@ -1,7 +1,11 @@
 import { Button, Col, Row } from "antd"
 import freeVendorManager from '../../assets/free-vendor-manager.png'
+import { NavLink } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 const VendorManager = () => {
+    const user = useSelector((state) => state?.user?.user)
+
     return (
         <div>
             <div className="bg-secondary">
@@ -18,13 +22,14 @@ const VendorManager = () => {
                             <p className="font-serif text-heading mb-3">Free Wedding Vendor Manager</p>
                             <p className="font-sans text-[16px] mb-10">The best wedding vendor management tool helps you keep everything in one place. Stay on top of contracts, invoices, deadlines, and payments so you can focus on celebrating your big day without last-minute surprises.
                             </p>
-                            <Button
-                                type="primary"
-                                className="border-none h-12 text-base font-medium w-[200px]"
-                                size="small"
-                            >
-                                Get Started
-                            </Button>
+                            <NavLink to={user?.uuid ? '/dashboard/vendor-manager/suggested-vendors' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    Get Started
+                                </Button>
+                            </NavLink>
                         </Col>
                         <Col span={12}>
                             <img src={freeVendorManager} />
@@ -41,13 +46,14 @@ const VendorManager = () => {
                             <p className="font-serif text-[18px] mb-3">Research and Add Vendors</p>
                             <p className="font-sans mb-10">Browse through recommendations from our wide range of vendors including photographers, florists, stylists, venues and more or search for vendors by category and/or location. Already have some vendors in mind? Custom add them directly into your vendor manager tool to automate your outreach and manage vendor details.
                             </p>
-                            <Button
-                                type="primary"
-                                className="font-sans border-none h-12 w-[200px]"
-                                size="small"
-                            >
-                                BUILD YOUR DREAM TEAM
-                            </Button>
+                            <NavLink to={user?.uuid ? '/dashboard/vendor-manager/suggested-vendors' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    BUILD YOUR DREAM TEAM
+                                </Button>
+                            </NavLink>
                         </Col>
                         <Col span={12}>
                             <img src={freeVendorManager} />
@@ -61,13 +67,14 @@ const VendorManager = () => {
                             <p className="font-serif text-[18px] mb-3">Manage Outreach and Vendor Information</p>
                             <p className="font-sans text-[16px] mb-10">Ready to start hiring? Easily organize vendor contact information, upload proposals, compare pricing, and review availability all in one place while adding notes about each of your vendor interactions.
                             </p>
-                            <Button
-                                type="primary"
-                                className="font-sans border-none h-12 w-[200px]"
-                                size="small"
-                            >
-                                BUILD YOUR DREAM TEAM
-                            </Button>
+                            <NavLink to={user?.uuid ? '/dashboard/vendor-manager/suggested-vendors' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    BUILD YOUR DREAM TEAM
+                                </Button>
+                            </NavLink>
                         </Col>
                     </Row>
                     <Row className="flex items-center my-5" gutter={24}>
@@ -75,13 +82,14 @@ const VendorManager = () => {
                             <p className="font-serif text-[18px] mb-3">Streamline Tasks and Track Vendor Payments</p>
                             <p className="font-sans text-[16px] mb-10">Manage your planning and budgeting by easily creating your vendors’ to-dos and syncing them with your wedding checklist, updating deposit status, and tracking vendor costs and payments to ensure a flawless execution within your set budgets.
                             </p>
-                            <Button
-                                type="primary"
-                                className="font-sans border-none h-12 w-[200px]"
-                                size="small"
-                            >
-                                BUILD YOUR DREAM TEAM
-                            </Button>
+                            <NavLink to={user?.uuid ? '/dashboard/vendor-manager/suggested-vendors' : '/login'}>
+                                <Button type='primary'
+                                    className="border-none text-base font-medium p-5 mb-6"
+                                    size="small"
+                                >
+                                    BUILD YOUR DREAM TEAM
+                                </Button>
+                            </NavLink>
                         </Col>
                         <Col span={12}>
                             <img src={freeVendorManager} />

@@ -204,18 +204,19 @@ function AddServiceModal({ isModalOpen, setIsModalOpen, getUserServices, editSer
                         />
                     </Form.Item>
 
-                    {/* <Form.Item
+                    <Form.Item
                         name="location"
                         label="Location"
                         rules={[
                             { required: true, message: 'Please enter location' }
                         ]}
                     >
-                        <ReactGoogleAutocomplete
-                            apiKey={mapApiKey}
-                            onPlaceSelected={(place) => console.log(place)}
+                        <Input
+                            placeholder="Location"
+                            size="medium"
+                            className="rounded-md"
                         />
-                    </Form.Item> */}
+                    </Form.Item>
 
 
                     <Form.Item

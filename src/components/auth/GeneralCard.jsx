@@ -51,7 +51,7 @@ const GeneralCard = ({ data, addVendor }) => {
                 <div className='flex justify-between'>
                     <div>
                         <p className='font-bold'>{data?.name}</p>
-                        <p className='text-[12px] font-medium'>Faro District, Portugal</p>
+                        <p className='text-[12px] font-medium'>{data?.location}</p>
                     </div>
                     {
                         addVendor &&

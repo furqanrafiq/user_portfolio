@@ -1,24 +1,38 @@
 import { Input, Button, Card } from 'antd';
 import heroSectionImg from '../../assets/herosection1.png'
+import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const { Search } = Input;
 
 const HeroSection = () => {
-  return (
-    <div className="relative" style={{ background: heroSectionImg }}>
-      <div className="absolute inset-0" >
-        <div className="absolute inset-0" ></div>
-      </div>
+  const user = useSelector((state) => state?.user?.user)
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+  return (
+    <div className="relative hero-section">
+      <img className='hero-section-image' />
+      {/* <div className="absolute inset-0" >
+        <div className="absolute inset-0" ></div>
+      </div> */}
+
+      <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div className="text-center">
-          <p className="text-black font-serif mb-6 text-heading">
+          <p className='font-serif text-[20px]'>Simple. Organized. Stress-Free.</p>
+          <p className="text-black font-serif mb-6 text-[32px]">
             Plan Your Perfect Wedding
           </p>
-          <p className="text-black text-xl max-w-lg mx-auto">
+          <NavLink to={user?.uuid ? '/dashboard/home' : '/login'}>
+            <Button type='primary'
+              className="border-none text-base font-medium p-5 mb-6"
+              size="small"
+            >
+              Start Planning
+            </Button>
+          </NavLink>
+          {/* <p className="text-black text-xl max-w-lg">
             Everything you need to plan your special day, all in one place.
-          </p>
-          <div className="mt-10">
+          </p> */}
+          {/* <div className="mt-10">
             <Card
               className="max-w-2xl mx-auto"
               styles={{ body: { padding: '1rem' } }}
@@ -29,7 +43,7 @@ const HeroSection = () => {
                 size="large"
               />
             </Card>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

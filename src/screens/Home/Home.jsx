@@ -1,3 +1,4 @@
+import AboveFooter from "./AboveFooter"
 import HeroSection from "./HeroSection"
 import LatestVendors from "./LatestVendors"
 import OurTools from "./OurTools"
@@ -8,7 +9,7 @@ const Home = () => {
             <HeroSection />
             <OurTools />
             <LatestVendors />
-            <HeroSection />
+            <AboveFooter />
         </div>
     )
 }

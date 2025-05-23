@@ -21,7 +21,7 @@ function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist, selecte
                 description: selectedChecklist?.description,
                 category: selectedChecklist?.category,
                 dueDate: dayjs(selectedChecklist.dueDate),
-                event: selectedChecklist.eventDetails?.eventId,
+                event: selectedChecklist?.eventId,
             });
         }
     }, [selectedChecklist, form]);
@@ -36,6 +36,7 @@ function CheckListModal({ isModalOpen, setIsModalOpen, getUserChecklist, selecte
     }, [])
 
     const onFinish = (values) => {
+        console.log(values)
         const body = { ...values }
         body.userId = user?.uuid;
         setLoading(true)
